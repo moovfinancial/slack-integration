@@ -13,6 +13,10 @@ Handles Slack's integration into Moov. This allows Slack organizations to load u
 
 Docs: [docs](https://moovfinancial.github.io/slack-integration/) | [open api specification](api/api.yml)
 
+## Architecture
+
+![](./SlackIntegration.png)
+
 ## Project Status
 
 This project is currently under development and could introduce breaking changes to reach a stable status. We are looking for community feedback so please try out our code or give us feedback!
