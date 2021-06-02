@@ -1,0 +1,40 @@
+# generated-from:24d34e2761f3f85420db0023934d404e3e4b378933667a9aa8fe417488f076ca DO NOT REMOVE, DO UPDATE
+
+name: Pull Request
+
+on:
+  push:
+    branches: [ "master", "v1", "v2" ]
+  pull_request: {}
+
+jobs:
+  testing:
+    name: Developer Build
+    runs-on: self-hosted
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.16
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }} # sets ref to the last commit hash
+
+      - name: Setup
+        run: make setup
+
+      - name: Check
+        run: make check
+
+      - name: Dev Docker
+        run: make dev-docker
+
+      - name: Dev Docker Push
+        run: make dev-push
+
+      - name: Teardown
+        if: ${{ always() }}
+        run: make teardown

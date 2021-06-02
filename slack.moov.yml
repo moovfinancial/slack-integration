@@ -1,0 +1,17 @@
+ProjectPath: "."
+Project:
+  ProjectID: "slack-integration"
+  OrgID: "moovfinancial"
+  ProjectName: "Slack"
+  Description: |
+    Handles Slack's integration into Moov. This allows Slack organizations to load up Moov off the Slack marketplace and connect to get Moov notifications into Slack channels
+MySQL:
+  Port: 3106
+Kafka:
+  Enabled: true
+Templates:
+  GoService:
+    ServicePort: 8232
+    HealthPort: 8233
+  GoGithubActionsPrivate: 
+    - Executable: slack

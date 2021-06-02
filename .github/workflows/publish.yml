@@ -1,0 +1,41 @@
+# generated-from:26ee8c9769effcc24abe95ae1706c784513afe90b50a736c8ebd7b759b383f45 DO NOT REMOVE, DO UPDATE
+
+name: Publish Release
+
+on:
+  push:
+    tags: [ "v*" ]
+
+jobs:
+  build:
+    name: Release Build
+    runs-on: self-hosted
+    steps:
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.16
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Install
+      run: make install
+
+    - name: Setup
+      run: make setup
+
+    - name: Check
+      run: make check
+
+    - name: Docker
+      run: make docker
+
+    - name: Docker push
+      run: make docker-push
+
+    - name: Teardown
+      if: ${{ always() }}
+      run: make teardown

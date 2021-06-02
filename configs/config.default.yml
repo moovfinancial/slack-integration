@@ -1,0 +1,40 @@
+# generated-from:60ba71985d551ef1c21b4a21ec7a1e9701ff1b47b6d0dc95c756162987e48a8a DO NOT REMOVE, DO UPDATE
+
+Slack:
+  Servers:
+    Public:
+      Bind:
+        Address: ":8232"
+    Admin:
+      Bind:
+        Address: ":8233"
+  Database:
+    DatabaseName: "slack-integration"
+    MySQL:
+      Address: "tcp(localhost:3106)"
+      User: "slack-integration"
+      Password: "slack-integration"
+  Gateway:
+    ServiceName: "slack-integration"
+    # Examples of how to set up this config.
+    # keys:
+    #   http:
+    #    urls:
+    #    - http://tumbler:8204/.well-known/jwks.json
+    #   file:
+    #     paths: 
+    #     - ./configs/gateway-jwks-sig-pub.json
+  Producers:
+    Brokers: 
+    - "localhost:9092"
+    TLS: false
+    Key: ""
+    Secret: ""
+  Consumer:
+    Brokers: 
+    - "localhost:9092"
+    TLS: false
+    Key: ""
+    Secret: ""
+    Topics:
+  
