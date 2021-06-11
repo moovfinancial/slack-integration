@@ -1,0 +1,11 @@
+html
+  head
+    title Working...
+  body
+    form(method='POST' name='hiddenform' action= url_action)
+      input(type='hidden' name='nonce_slack' value= nonce_slack)
+      noscript
+        p Script is disabled. Click Submit to continue.
+        input(type='submit' value='Submit')
+    script(language='javascript').
+      document.forms[0].submit();

@@ -17,6 +17,35 @@ Docs: [docs](https://moovfinancial.github.io/slack-integration/) | [open api spe
 
 ![](./SlackIntegration.png)
 
+### High Architecture
+
+![](./images/HighArchitecture.jpg)
+
+
+### Install process
+
+![](./images/InstallProcess.jpg)
+
+### Binding Accounts
+
+![](./images/BindingAccounts.jpg)
+
+### Enable Notifications
+
+![](./images/EnableNotifications.jpg)
+
+### Send notifications
+
+![](./images/SendNotifications.jpg)
+
+### Binding Process
+
+![](./images/BindingProcess.jpg)
+
+### Database
+
+![](./images/Database.jpg)
+
 ## Project Status
 
 This project is currently under development and could introduce breaking changes to reach a stable status. We are looking for community feedback so please try out our code or give us feedback!
