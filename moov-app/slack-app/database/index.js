@@ -2,10 +2,10 @@ const mysql = require('mysql2/promise')
 
 async function connection_mysql() {
     const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'slack_user',
-        password: 'Temporal.00',
-        database: 'slack_poc_app'
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE
     })
     return connection
 }
@@ -13,33 +13,50 @@ async function connection_mysql() {
 
 async function addInstallation(team_id, installation) {
 
-    const connection = await connection_mysql()
+    try {
+        const connection = await connection_mysql()
 
-    const sql_1 = "INSERT INTO slack_team (team_id, installation) values (?,?)"
-    await connection.execute(sql_1, [team_id, installation]);
+        const sql_1 = "SELECT installation FROM slack_team WHERE team_id = ?"
+        const [rows, fields] = await connection.execute(sql_1, [team_id]);
 
-    const sql_2 = "INSERT INTO slack_team_user (team_user_id, installation) values (?,?)"
-    await connection.execute(sql_2, [`${team_id}_${installation.user.id}`, installation])
+        if (rows.length == 0) {
+            const sql_2 = "INSERT INTO slack_team (team_id, installation) values (?,?)"
+            await connection.execute(sql_2, [`${team_id}`, installation])
+        }
+    } catch(e) {
+        console.error(e)
+    }
+
 }
 
 
 async function getInstallation(team_id) {
 
-    const connection = await connection_mysql()
+    try {
+        const connection = await connection_mysql()
 
-    const sql_1 = "SELECT installation FROM slack_team WHERE team_id = ?"
-    const [rows, fields] = await connection.execute(sql_1, [team_id]);
+        const sql_1 = "SELECT installation FROM slack_team WHERE team_id = ?"
+        const [rows, fields] = await connection.execute(sql_1, [team_id]);
+    
+        return rows[0].installation
+    } catch(e) {
+        console.error(e)
+    }
 
-    return rows[0].installation
 }
 
 
-async function addBindingProcess(nonce_slack, team_user_id) {
+async function addBindingProcess(nonce_slack, team_id) {
 
-    const connection = await connection_mysql()
+    try {
+        const connection = await connection_mysql()
 
-    const sql_1 = "INSERT INTO slack_temp_code (nonce_slack, team_user_id) values (?,?)"
-    await connection.execute(sql_1, [nonce_slack, team_user_id]);
+        const sql_1 = "INSERT INTO slack_temp_code (nonce_slack, team_id) values (?,?)"
+        await connection.execute(sql_1, [nonce_slack, team_id]);
+    } catch(e) {
+        console.error(e)
+    }
+
 
 }
 

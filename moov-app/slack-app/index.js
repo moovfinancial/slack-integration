@@ -22,6 +22,24 @@ const receiver = new ExpressReceiver({
     scopes: ['channels:history', 'channels:read', 'chat:write', 'chat:write.public', 'commands', 'groups:history', 'groups:write', 'im:history', 'mpim:history', 'groups:read', 'im:read', 'mpim:read'],
     installerOptions: {
         userScopes: ['channels:read', 'groups:read', 'im:read', 'mpim:read'],
+        callbackOptions: {
+            success: async (installation, installOptions, req, res) => {
+              const app2 = new App({
+                token: installation.bot.token,
+                signingSecret: process.env.SLACK_SIGNING_SECRET,
+              })
+              const user_id = installation.user.id
+              await app2.client.chat.postMessage({
+                  channel: user_id,
+                  text: "Welcome! You’re almost ready to start receiving Moov payment details in Slack."                        
+              })
+              res.send('successful!');
+            }, 
+            failure: (error, installOptions , req, res) => {
+              // Do custom failure logic here
+              res.send('failure');
+            }
+          }
     },
     installationStore: {
         storeInstallation: (installation) => {
@@ -44,38 +62,12 @@ const receiver = new ExpressReceiver({
     },
     logLevel: LogLevel.DEBUG
 });
+
 receiver.router.use(express.urlencoded({
     extended: true
 }))
 
 const app = new App({
-    signingSecret: process.env.SLACK_SIGNING_SECRET,
-    clientId: process.env.SLACK_CLIENT_ID,
-    clientSecret: process.env.SLACK_CLIENT_SECRET,
-    stateSecret: process.env.SECRET,
-    scopes: ['channels:history', 'channels:read', 'chat:write', 'chat:write.public', 'commands', 'groups:history', 'groups:write', 'im:history', 'mpim:history', 'groups:read', 'im:read', 'mpim:read'],
-    installerOptions: {
-        userScopes: ['channels:read', 'groups:read', 'im:read', 'mpim:read'],
-    },
-    installationStore: {
-        storeInstallation: (installation) => {
-            if (installation.isEnterpriseInstall) {
-                return addInstallation(installation.enterprise.id, installation)
-            } else {
-                return addInstallation(installation.team.id, installation)
-            }
-            throw new Error('Failed saving installation data to installationStore');
-        },
-        fetchInstallation: (installQuery) => {
-            if (installQuery.isEnterpriseInstall && installQuery.enterpriseId !== undefined) {
-                return getInstallation(installQuery.enterpriseId)
-            }
-            if (installQuery.teamId !== undefined) {
-                return getInstallation(installQuery.teamId);
-            }
-            throw new Error('Failed fetching installation')
-        }
-    },
     receiver,
     logLevel: LogLevel.DEBUG
 })
@@ -100,13 +92,13 @@ app.command('/moov', async ({
         await ack();
         if (command.text == 'auth') {
             const nonce_slack = nanoid(60)
-            await addBindingProcess(nonce_slack, `${command.team_id}_${command.user_id}`)
+            await addBindingProcess(nonce_slack, `${command.team_id}`)
             const response = {
                 "blocks": [{
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": ":bust_in_silhouette: Finish integrating Slack and Moov by logging into your Moov account."
+                            "text": ":bust_in_silhouette: Let’s link your Moov account so we can get started!"
                         }
                     },
                     {
