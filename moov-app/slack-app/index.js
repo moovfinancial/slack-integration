@@ -10,7 +10,9 @@ const {
 const {
     addInstallation,
     getInstallation,
-    addBindingProcess
+    addBindingProcess,
+    getBotToken,
+    setSlackChannel
 } = require('./database/index')
 const express = require('express')
 
@@ -24,22 +26,22 @@ const receiver = new ExpressReceiver({
         userScopes: ['channels:read', 'groups:read', 'im:read', 'mpim:read'],
         callbackOptions: {
             success: async (installation, installOptions, req, res) => {
-              const app2 = new App({
-                token: installation.bot.token,
-                signingSecret: process.env.SLACK_SIGNING_SECRET,
-              })
-              const user_id = installation.user.id
-              await app2.client.chat.postMessage({
-                  channel: user_id,
-                  text: "Welcome! You’re almost ready to start receiving Moov payment details in Slack."                        
-              })
-              res.send('successful!');
-            }, 
-            failure: (error, installOptions , req, res) => {
-              // Do custom failure logic here
-              res.send('failure');
+                const app2 = new App({
+                    token: installation.bot.token,
+                    signingSecret: process.env.SLACK_SIGNING_SECRET,
+                })
+                const user_id = installation.user.id
+                await app2.client.chat.postMessage({
+                    channel: user_id,
+                    text: "Welcome! You’re almost ready to start receiving Moov payment details in Slack. :wave:"
+                })
+                res.send('successful!');
+            },
+            failure: (error, installOptions, req, res) => {
+                // Do custom failure logic here
+                res.send('failure');
             }
-          }
+        }
     },
     installationStore: {
         storeInstallation: (installation) => {
@@ -63,6 +65,7 @@ const receiver = new ExpressReceiver({
     logLevel: LogLevel.DEBUG
 });
 
+receiver.router.use(express.json())
 receiver.router.use(express.urlencoded({
     extended: true
 }))
@@ -106,7 +109,7 @@ app.command('/moov', async ({
                         "block_id": "actionblock789",
                         "elements": [{
                             "type": "button",
-                            "action_id": "foo",
+                            "action_id": "login_button",
                             "text": {
                                 "type": "plain_text",
                                 "text": "Log In"
@@ -137,13 +140,42 @@ receiver.router.post('/callback', (req, res) => {
     res.send('yay! you are authenticated')
 });
 
+
+receiver.router.post('/list-slack-channels', async (req, res) => {
+    const botToken = await getBotToken(req.body.customer_id)
+    const app2 = new App({
+        token: botToken,
+        signingSecret: process.env.SLACK_SIGNING_SECRET,
+    })
+    const slack_channels = await app2.client.conversations.list({
+        exclude_archived: true,
+        types: 'public_channel,private_channel'
+    })
+    const channels = []
+    for (const channel of slack_channels.channels) {
+        channels.push({
+            channel_id: channel.id,
+            channel_name: channel.name
+        })
+    }
+    res.send(channels)
+});
+
+
+receiver.router.post('/set-slack-channel', async (req, res) => {
+    await setSlackChannel(req.body.customer_id, req.body.channel_id)
+    res.sendStatus(200)
+});
+
+
 app.error((error) => {
     // Check the details of the error to handle cases where you should retry sending a message or stop the app
     console.log('global error')
     console.error(error);
 });
 
-app.action('foo', ({
+
+app.action('login_button', ({
     body,
     ack,
     say
@@ -152,6 +184,7 @@ app.action('foo', ({
     ack();
     // say(`<@${body.user.id}> clicked the button`);
 });
+
 
 (async () => {
     // Start your app

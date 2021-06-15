@@ -35,7 +35,7 @@ curl --location --request POST 'http://localhost:4000/producer/events' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "transfer_id": "xxxxx",
-  "customer_id": 123232,
+  "customer_id": 1,
   "amount": 3,
   "destination": 11232,
   "description": 5,
@@ -61,9 +61,9 @@ npm run dev
 npm run dev
 ```
 
-7.- Start ngrok ./ngrok http -region=us -hostname=dev2.clouddevs.net 3000
+7.- Start ngrok ./ngrok http -region=us -hostname=my.domain.com 3000
 
-8.- Install slack app by http://dev2.clouddevs.net/slack/install
+8.- Install slack app by http://my.domain.com/slack/install
 
 9.- Bind slack user with application user by /moov auth
 
@@ -74,11 +74,11 @@ curl --location --request POST 'http://localhost:4000/producer/events' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "transfer_id": "xxxxx",
-  "customer_id": 123232,
+  "customer_id": 1,
   "amount": 3,
   "destination": 11232,
   "description": 5,
-  "status": "success"
+  "status": "processed"
 }'
 ```
 
@@ -91,10 +91,10 @@ curl --location --request POST 'http://localhost:4000/producer/events' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "transfer_id": "xxxxx",
-  "customer_id": 123232,
+  "customer_id": 1,
   "amount": 3,
   "destination": 11232,
   "description": 5,
-  "status": "success"
+  "status": "failed"
 }'
 ```

@@ -60,6 +60,37 @@ async function addBindingProcess(nonce_slack, team_id) {
 
 }
 
+
+async function getBotToken(customer_id) {
+
+    try {
+        const connection = await connection_mysql()
+
+        const sql_1 = "SELECT installation, channel_id FROM slack_team WHERE customer_id = ?"
+        const [rows, fields] = await connection.execute(sql_1, [customer_id]);
+
+        return rows[0].installation.bot.token
+    } catch(e) {
+        console.error(e)
+    }
+
+}
+
+
+async function setSlackChannel(customer_id, channel_id) {
+
+    try {
+        const connection = await connection_mysql()
+
+        const sql_1 = "UPDATE slack_team SET channel_id = ? WHERE customer_id = ?"
+        await connection.execute(sql_1, [channel_id, customer_id]);
+    } catch(e) {
+        console.error(e)
+    }
+}
+
 module.exports.addInstallation = addInstallation
 module.exports.getInstallation = getInstallation
 module.exports.addBindingProcess = addBindingProcess
+module.exports.getBotToken = getBotToken
+module.exports.setSlackChannel = setSlackChannel
