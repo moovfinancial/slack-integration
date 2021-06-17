@@ -43,31 +43,48 @@ curl --location --request POST 'http://localhost:4000/producer/events' \
 }'
 ```
 
-4.- Start slack-consumer
+4.- Start auth-google (port: 3000) **(Pending)**
 
 ```shell
 npm run dev
 ```
 
-5.- Start auth-google (port: 3000)
+5.- Start slack-app (port: 8080)
 
 ```shell
 npm run dev
 ```
 
-6.- Start slack-app (port: 8080)
+6.- Start ngrok ./ngrok http -region=us -hostname=my.domain.com 3000
+
+7.- Install slack app by http://my.domain.com/slack/install
+
+8.- Bind slack user with application user by /moov auth **(Pending)**
+
+9.- Create a channel and add slack app
+
+10.- Search slack channels
 
 ```shell
-npm run dev
+curl --location --request POST 'http://localhost:3000/list-slack-channels' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "customer_id": 1
+}'
 ```
 
-7.- Start ngrok ./ngrok http -region=us -hostname=my.domain.com 3000
+11.- Select the new channel created
 
-8.- Install slack app by http://my.domain.com/slack/install
+```shell
+curl --location --request POST 'http://localhost:3000/set-slack-channel' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "customer_id": 1,
+    "channel_id": "C02567EAV5G"
+}'
+```
 
-9.- Bind slack user with application user by /moov auth
-
-10.- Send a transfer event (channel app)
+12.- Send a processed transfer event
 
 ```shell
 curl --location --request POST 'http://localhost:4000/producer/events' \
@@ -82,9 +99,7 @@ curl --location --request POST 'http://localhost:4000/producer/events' \
 }'
 ```
 
-11.- Select a specific slack channel
-
-3.2.- Send a new transfer event test
+13.- Send a failed transfer event
 
 ```shell
 curl --location --request POST 'http://localhost:4000/producer/events' \

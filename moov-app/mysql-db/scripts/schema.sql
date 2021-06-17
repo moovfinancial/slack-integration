@@ -42,3 +42,9 @@ CREATE TABLE slack_temp_code(
         REFERENCES slack_team(team_id)
         ON DELETE CASCADE    
 );
+
+
+CREATE TABLE slack_state(
+	random_state VARCHAR(100),
+    installation_url_options  JSON NOT NULL
+);
