@@ -9,7 +9,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/markbates/pkger v0.17.1
 	github.com/moov-io/base v0.19.0
-	github.com/moovfinancial/events v0.6.8
+	github.com/moovfinancial/events v0.6.37
 	github.com/moovfinancial/go-observability v0.0.6
 	github.com/moovfinancial/go-zero-trust/v2 v2.3.0
 	github.com/stretchr/testify v1.7.0
