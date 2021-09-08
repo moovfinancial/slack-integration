@@ -1,8 +1,8 @@
 {
-  "name": "producer",
+  "name": "slack-app",
   "version": "1.0.0",
   "description": "",
-  "main": "producer.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon node"
@@ -11,7 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "kafkajs": "^1.15.0"
+    "@slack/bolt": "^3.6.0",
+    "axios": "^0.21.1",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.12"
   }
 }
