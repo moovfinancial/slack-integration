@@ -13,6 +13,34 @@ Handles Slack's integration into Moov. This allows Slack organizations to load u
 
 Docs: [docs](https://moovfinancial.github.io/slack-integration/) | [open api specification](api/api.yml)
 
+
+## Project Status
+
+This project is currently under development and could introduce breaking changes to reach a stable status. We are looking for community feedback so please try out our code or give us feedback!
+
+## Getting Started
+
+Read through the [project docs](docs/README.md) over here to get an understanding of the purpose of this project and how to run it.
+
+## Getting Help
+
+ channel | info
+ ------- | -------
+ [Project Documentation](docs/README.md) | Our project documentation available online.
+Twitter [@moov_io](https://twitter.com/moov_io)	| You can follow Moov.IO's Twitter feed to get updates on our project(s). You can also tweet us questions or just share blogs or stories.
+[GitHub Issue](https://github.com/moovfinancial/slack-integration/issues) | If you are able to reproduce a problem please open a GitHub Issue under the specific project that caused the error.
+[moov-io slack](https://slack.moov.io/) | Join our slack channel (`#slack-integration`) to have an interactive discussion about the development of the project.
+
+## Supported and Tested Platforms
+
+- 64-bit Linux (Ubuntu, Debian), macOS, and Windows
+
+## Contributing
+
+Yes please! Please review our [Contributing guide](CONTRIBUTING.md) and [Code of Conduct](https://github.com/moov-io/ach/blob/master/CODE_OF_CONDUCT.md) to get started! Checkout our [issues for first time contributors](https://github.com/moovfinancial/slack-integration/contribute) for something to help out with.
+
+This project uses [Go Modules](https://github.com/golang/go/wiki/Modules) and uses Go 1.14 or higher. See [Golang's install instructions](https://golang.org/doc/install) for help setting up Go. You can download the source code and we offer [tagged and released versions](https://github.com/moovfinancial/slack-integration/releases/latest) as well. We highly recommend you use a tagged release for production.
+
 ## Architecture
 
 ![](./SlackIntegration.png)
@@ -46,32 +74,6 @@ Docs: [docs](https://moovfinancial.github.io/slack-integration/) | [open api spe
 
 ![](./images/Database.jpg)
 
-## Project Status
-
-This project is currently under development and could introduce breaking changes to reach a stable status. We are looking for community feedback so please try out our code or give us feedback!
-
-## Getting Started
-
-Read through the [project docs](docs/README.md) over here to get an understanding of the purpose of this project and how to run it.
-
-## Getting Help
-
- channel | info
- ------- | -------
- [Project Documentation](docs/README.md) | Our project documentation available online.
-Twitter [@moov_io](https://twitter.com/moov_io)	| You can follow Moov.IO's Twitter feed to get updates on our project(s). You can also tweet us questions or just share blogs or stories.
-[GitHub Issue](https://github.com/moovfinancial/slack-integration/issues) | If you are able to reproduce a problem please open a GitHub Issue under the specific project that caused the error.
-[moov-io slack](https://slack.moov.io/) | Join our slack channel (`#slack-integration`) to have an interactive discussion about the development of the project.
-
-## Supported and Tested Platforms
-
-- 64-bit Linux (Ubuntu, Debian), macOS, and Windows
-
-## Contributing
-
-Yes please! Please review our [Contributing guide](CONTRIBUTING.md) and [Code of Conduct](https://github.com/moov-io/ach/blob/master/CODE_OF_CONDUCT.md) to get started! Checkout our [issues for first time contributors](https://github.com/moovfinancial/slack-integration/contribute) for something to help out with.
-
-This project uses [Go Modules](https://github.com/golang/go/wiki/Modules) and uses Go 1.14 or higher. See [Golang's install instructions](https://golang.org/doc/install) for help setting up Go. You can download the source code and we offer [tagged and released versions](https://github.com/moovfinancial/slack-integration/releases/latest) as well. We highly recommend you use a tagged release for production.
 
 ### Test Coverage
 
