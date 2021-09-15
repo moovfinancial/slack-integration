@@ -8,11 +8,9 @@ moovfinancial/slack-integration
 [![Go Report Card](https://goreportcard.com/badge/github.com/moovfinancial/slack-integration)](https://goreportcard.com/report/github.com/moovfinancial/slack-integration)
 [![Apache 2 licensed](https://img.shields.io/badge/license-Apache2-blue.svg)](https://raw.githubusercontent.com/moovfinancial/slack-integration/master/LICENSE)
 
-Handles Slack's integration into Moov. This allows Slack organizations to load up Moov off the Slack marketplace and connect to get Moov notifications into Slack channels
+This Slack integration is a Moov OSS project allowing you to listen for and observe monetary transfers as they happen. Being able to observe updates on monetary transfers real-time helps with monitoring, transparency, and fraud prevention. 
 
-
-Docs: [docs](https://moovfinancial.github.io/slack-integration/) | [open api specification](api/api.yml)
-
+Once you've configured the project to run on your server and connect to your chosen Slack channel, it will listen for webhook events related to transfers. When a transfer has been created or completed, it will post a message to the predetermined Slack channel. 
 
 ## Project Status
 
