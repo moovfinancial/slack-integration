@@ -1,0 +1,13 @@
+# See the README for more information and proper use of this file.
+
+slack:
+  token: "xxxx"          # Slack bot token
+  signingSecret: "xxxx"  # Signing secret for message authentication
+  channel: "xxxx"        # Channel to receive notifications
+
+moov:
+  publicKey: "xxxx"      # API key's public key
+  secretKey: "xxxx"      # API key's secret key
+  webhookSecret: "xxxx"  # Webhook's signing secret for message authentication
+
+port: 8080               # Express server port

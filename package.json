@@ -1,0 +1,30 @@
+{
+  "name": "slack-integration",
+  "version": "0.9.0",
+  "description": "Get Moov transfer notifications in Slack",
+  "main": "dist/index.js",
+  "repository": "https://github.com/moov-io/slack-integration",
+  "author": "Moov Financial",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "start": "node ./dist/index.js",
+    "start:watch": "nodemon ./dist/index.js --watch ./dist --watch ./.env"
+  },
+  "devDependencies": {
+    "@types/node": "^16.9.1",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "@slack/bolt": "^3.6.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "got": "^11.8.2",
+    "yaml": "^1.10.2"
+  }
+}
