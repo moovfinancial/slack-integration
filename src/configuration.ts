@@ -9,10 +9,11 @@ export interface Configuration {
     channel: string;
   };
   moov: {
+    accountID: string;
     publicKey: string;
     secretKey: string;
     webhookSecret: string;
-    apiUrl?: string;
+    apiUrl: string;
   };
   port: number;
 }
@@ -54,6 +55,7 @@ function loadFromEnv(): Configuration {
       channel: process.env.SLACK_CHANNEL || "",
     },
     moov: {
+      accountID: process.env.MOOV_ACCOUNT_ID || "",
       publicKey: process.env.MOOV_PUBLIC_KEY || "",
       secretKey: process.env.MOOV_SECRET_KEY || "",
       webhookSecret: process.env.MOOV_WEBHOOK_SECRET || "",
@@ -73,6 +75,7 @@ function mergeAndValidate(
   if (!config.slack?.token) report("slack.token");
   if (!config.slack?.signingSecret) report("slack.signingSecret");
   if (!config.slack?.channel) report("slack.channel");
+  if (!config.moov?.accountID) report("moov.accountID");
   if (!config.moov?.publicKey) report("moov.publicKey");
   if (!config.moov?.secretKey) report("moov.secretKey");
   if (!config.moov?.webhookSecret) report("moov.webhookSecret");

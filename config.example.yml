@@ -6,6 +6,7 @@ slack:
   channel: "xxxx"        # Channel to receive notifications
 
 moov:
+  accountID: "xxxx"      # Moov account ID
   publicKey: "xxxx"      # API key's public key
   secretKey: "xxxx"      # API key's secret key
   webhookSecret: "xxxx"  # Webhook's signing secret for message authentication

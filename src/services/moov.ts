@@ -1,4 +1,4 @@
-import { active as getConfig } from "../configuration";
+import * as configuration from "../configuration";
 import got from "got";
 import buildGotErrorMessage from "../helpers/buildGotErrorMessage";
 
@@ -11,8 +11,8 @@ export async function getTransferData(transferID: string): Promise<any> {
   // TODO: Create token and get transfer data
 }
 
-async function createToken(accountID: string): Promise<MoovToken> {
-  const config = getConfig();
+async function createToken(): Promise<MoovToken> {
+  const config = configuration.active();
   const url = config.moov.apiUrl + "/oauth2/token";
 
   let result: any;
@@ -22,7 +22,7 @@ async function createToken(accountID: string): Promise<MoovToken> {
       method: "POST",
       form: {
         grant_type: "client_credentials",
-        scope: `/ping.read /accounts/${accountID}/transfers.read`,
+        scope: `/ping.read /accounts/${config.moov.accountID}/transfers.read`,
       },
       username: config.moov.publicKey,
       password: config.moov.secretKey,

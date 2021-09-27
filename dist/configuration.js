@@ -55,6 +55,7 @@ function loadFromEnv() {
             channel: process.env.SLACK_CHANNEL || "",
         },
         moov: {
+            accountID: process.env.MOOV_ACCOUNT_ID || "",
             publicKey: process.env.MOOV_PUBLIC_KEY || "",
             secretKey: process.env.MOOV_SECRET_KEY || "",
             webhookSecret: process.env.MOOV_WEBHOOK_SECRET || "",
@@ -64,7 +65,7 @@ function loadFromEnv() {
     };
 }
 function mergeAndValidate(envConfig, fileConfig) {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g;
     const config = Object.assign({}, envConfig, fileConfig);
     const report = (name) => console.error(`error: configuration: missing ${name}`);
     if (!((_a = config.slack) === null || _a === void 0 ? void 0 : _a.token))
@@ -73,11 +74,13 @@ function mergeAndValidate(envConfig, fileConfig) {
         report("slack.signingSecret");
     if (!((_c = config.slack) === null || _c === void 0 ? void 0 : _c.channel))
         report("slack.channel");
-    if (!((_d = config.moov) === null || _d === void 0 ? void 0 : _d.publicKey))
+    if (!((_d = config.moov) === null || _d === void 0 ? void 0 : _d.accountID))
+        report("moov.accountID");
+    if (!((_e = config.moov) === null || _e === void 0 ? void 0 : _e.publicKey))
         report("moov.publicKey");
-    if (!((_e = config.moov) === null || _e === void 0 ? void 0 : _e.secretKey))
+    if (!((_f = config.moov) === null || _f === void 0 ? void 0 : _f.secretKey))
         report("moov.secretKey");
-    if (!((_f = config.moov) === null || _f === void 0 ? void 0 : _f.webhookSecret))
+    if (!((_g = config.moov) === null || _g === void 0 ? void 0 : _g.webhookSecret))
         report("moov.webhookSecret");
     return config;
 }

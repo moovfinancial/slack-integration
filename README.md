@@ -1,6 +1,6 @@
 # Moov for Slack
 
-A sample application that routes Moov transfer events to a Slack channel. You can click on a notification in Slack to open the transfer in the Moov Dashboard.
+A sample application that routes Moov transfer events to a Slack channel. Click on the notifcation to see additional transfer details.
 
 * [TypeScript](https://www.typescriptlang.org/)
 * [Node.js](https://nodejs.org/)
@@ -9,10 +9,6 @@ A sample application that routes Moov transfer events to a Slack channel. You ca
 * [Slack Bolt](https://api.slack.com/tools/bolt)
 
 Configure and deploy Moov for Slack in your environment to see it in action, and then fork the repository to customize it for your organization's needs.
-
-## Quickstart
-
-*TBD*
 
 ## Building and running the app
 
