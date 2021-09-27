@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.active = exports.start = void 0;
 const bolt_1 = require("@slack/bolt");
 const express_1 = __importDefault(require("express"));
+const slack_1 = require("./controllers/slack");
 let application = null;
 async function start(config) {
     const receiver = new bolt_1.ExpressReceiver({ signingSecret: config.slack.signingSecret });
@@ -13,7 +14,7 @@ async function start(config) {
     application.action("inspectTransfer", () => Promise.resolve());
     receiver.router.use(express_1.default.json());
     receiver.router.use(express_1.default.urlencoded({ extended: true }));
-    receiver.router.post("/webhook/transfer", () => Promise.resolve());
+    receiver.router.post("/webhook/transfer", slack_1.receiveWebhookEvent);
     receiver.router.get("/ping", async (_, res) => res.sendStatus(200));
     await application.start(config.port);
     console.log(`listening on port ${config.port}`);
