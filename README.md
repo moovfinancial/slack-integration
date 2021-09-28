@@ -6,36 +6,7 @@ A sample application that routes Moov transfer events to a Slack channel. You ca
 
 ## How it works
 
-```text
-+-----------+                +-----------------+                        +-------+                +-----+
-| Moov_API  |                | Moov_for_Slack  |                        | Slack |                | You |
-+-----------+                +-----------------+                        +-------+                +-----+
-      |                               |                                     |                       |
-      | :zap: Transfer event              |                                     |                       |
-      |------------------------------>|                                     |                       |
-      |                               |                                     |                       |
-      |          Get transfer details |                                     |                       |
-      |<------------------------------|                                     |                       |
-      |                               |                                     |                       |
-      |                               | Post message in Channel             |                       |
-      |                               |------------------------------------>|                       |
-      
-     ...                             ...                                   ...                     ...
-      
-      |                               |                                     |   Tap Details button |
-      |                               |                                     |<----------------------|
-      |                               |                                     |                       |
-      |                               |                   Details requested |                       |
-      |                               |<------------------------------------|                       |
-      |                               |                                     |                       |
-      |          Get transfer details |                                     |                       |
-      |<------------------------------|                                     |                       |
-      |                               |                                     |                       |
-      |                               | Display transfer details dialog     |                       |
-      |                               |------------------------------------>|                       |
-      |                               |                                     |                       |
-```
-
+![Slack integration_- How it works](https://user-images.githubusercontent.com/574793/135172753-5221b83f-b3ff-466c-b334-3f6fe1c70e68.png)
 
 * [TypeScript](https://www.typescriptlang.org/)
 * [Node.js](https://nodejs.org/)
