@@ -1,5 +1,6 @@
-import * as configuration from "../configuration";
 import got from "got";
+
+import * as configuration from "../configuration";
 import buildGotErrorMessage from "../helpers/buildGotErrorMessage";
 
 export interface MoovToken {

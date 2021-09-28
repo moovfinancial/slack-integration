@@ -22,37 +22,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTransferData = void 0;
+const crypto_1 = require("crypto");
 const got_1 = __importDefault(require("got"));
 const configuration = __importStar(require("../configuration"));
 const buildGotErrorMessage_1 = __importDefault(require("../helpers/buildGotErrorMessage"));
-async function getTransferData(transferID) {
-    // TODO: Create token and get transfer data
-}
-exports.getTransferData = getTransferData;
-async function createToken() {
+const authentication_1 = require("../services/authentication");
+(async () => {
+    await configuration.load();
     const config = configuration.active();
-    const url = config.moov.apiUrl + "/oauth2/token";
-    let result;
+    const url = `http://localhost:${config.port}/webhook/transfer`;
+    const timestamp = new Date().toISOString();
+    const nonce = (0, crypto_1.randomUUID)();
+    const webhookID = (0, crypto_1.randomUUID)();
+    const signature = (0, authentication_1.generateSignature)(timestamp, nonce, webhookID);
     try {
-        result = await (0, got_1.default)({
+        const res = await (0, got_1.default)({
             url,
             method: "POST",
-            form: {
-                grant_type: "client_credentials",
-                scope: `/ping.read /accounts/${config.moov.accountID}/transfers.read`,
+            headers: {
+                "x-timestamp": timestamp,
+                "x-nonce": nonce,
+                "x-webhook-id": webhookID,
+                "x-signature": signature,
             },
-            username: config.moov.publicKey,
-            password: config.moov.secretKey,
-        }).json();
+            json: {
+                eventID: (0, crypto_1.randomUUID)(),
+                type: "transfer.updated",
+                data: {
+                    transferID: process.argv[2],
+                    status: "completed",
+                },
+                createdOn: new Date().toISOString(),
+            },
+        });
+        console.log(`Response: ${res.statusCode}`);
     }
     catch (err) {
-        const msg = `moov.fetchCredentials failed: ${(0, buildGotErrorMessage_1.default)(err)}`;
-        throw new Error(msg);
+        console.error(`sendTransferEvent failed: ${(0, buildGotErrorMessage_1.default)(err)}`);
+        process.exit(1);
     }
-    const expiresOn = Math.round(new Date().getTime() / 1000) - result.expires_in;
-    return {
-        value: result.access_token,
-        expiresOn,
-    };
-}
+})();

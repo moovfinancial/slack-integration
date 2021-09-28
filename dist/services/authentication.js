@@ -19,16 +19,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signatureIsValid = void 0;
+exports.generateSignature = exports.signatureIsValid = void 0;
 const crypto = __importStar(require("crypto"));
 const configuration_1 = require("../configuration");
 function signatureIsValid(headers) {
     const config = (0, configuration_1.active)();
-    const timeStamp = headers["x-timestamp"];
+    const timestamp = headers["x-timestamp"];
     const nonce = headers["x-nonce"];
     const webhookID = headers["x-webhook-id"];
     const signature = headers["x-signature"];
-    const payload = `${timeStamp}|${nonce}|${webhookID}`;
+    const payload = `${timestamp}|${nonce}|${webhookID}`;
     const checkHash = crypto
         .createHmac("sha512", config.moov.webhookSecret)
         .update(payload)
@@ -36,3 +36,13 @@ function signatureIsValid(headers) {
     return signature === checkHash;
 }
 exports.signatureIsValid = signatureIsValid;
+function generateSignature(timestamp, nonce, webhookID) {
+    const config = (0, configuration_1.active)();
+    const payload = `${timestamp}|${nonce}|${webhookID}`;
+    const signature = crypto
+        .createHmac("sha512", config.moov.webhookSecret)
+        .update(payload)
+        .digest("hex");
+    return signature;
+}
+exports.generateSignature = generateSignature;

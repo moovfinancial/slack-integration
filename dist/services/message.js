@@ -38,8 +38,8 @@ function transferMessage(transferData) {
                     text: "Details",
                     emoji: true,
                 },
-                value: "click_me_123",
-                action_id: "button-action",
+                value: `${transferData.transferID}`,
+                action_id: "inspectTransfer",
             },
         },
     ];
