@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "repository": "https://github.com/moov-io/slack-integration",
   "author": "Moov Financial",
-  "license": "MIT",
+  "license": "Apache2",
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "tsc",

@@ -1,8 +1,40 @@
 # Moov for Slack
 
-A sample application that routes Moov transfer events to a Slack channel. Click on the notifcation to see additional transfer details.
+A sample application that routes Moov transfer events to a Slack channel. You can configure and deploy Moov for Slack to see it in action, and then fork the repository to customize it for your organization's needs.
 
 ![Moov for Slack notifications](https://user-images.githubusercontent.com/574793/135163070-fdd5ad49-7a85-4a7e-8f9d-8dc8ee263702.png)
+
+## How it works
+
+```text
++-----------+                +-----------------+                        +-------+                +-----+
+| Moov_API  |                | Moov_for_Slack  |                        | Slack |                | You |
++-----------+                +-----------------+                        +-------+                +-----+
+      |                               |                                     |                       |
+      | :zap: Transfer event              |                                     |                       |
+      |------------------------------>|                                     |                       |
+      |                               |                                     |                       |
+      |          Get transfer details |                                     |                       |
+      |<------------------------------|                                     |                       |
+      |                               |                                     |                       |
+      |                               | Post message in Channel             |                       |
+      |                               |------------------------------------>|                       |
+      
+     ...                             ...                                   ...                     ...
+      
+      |                               |                                     |   Tap Details button |
+      |                               |                                     |<----------------------|
+      |                               |                                     |                       |
+      |                               |                   Details requested |                       |
+      |                               |<------------------------------------|                       |
+      |                               |                                     |                       |
+      |          Get transfer details |                                     |                       |
+      |<------------------------------|                                     |                       |
+      |                               |                                     |                       |
+      |                               | Display transfer details dialog     |                       |
+      |                               |------------------------------------>|                       |
+      |                               |                                     |                       |
+```
 
 
 * [TypeScript](https://www.typescriptlang.org/)
@@ -11,7 +43,6 @@ A sample application that routes Moov transfer events to a Slack channel. Click 
 * [Moov](https://docs.moov.io/)
 * [Slack Bolt](https://api.slack.com/tools/bolt)
 
-Configure and deploy Moov for Slack in your environment to see it in action, and then fork the repository to customize it for your organization's needs.
 
 ## Building and running the app
 
