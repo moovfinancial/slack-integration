@@ -2,6 +2,8 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import * as yaml from "yaml";
 
+import deepMerge from "./helpers/deepMerge";
+
 export interface Configuration {
   slack: {
     token: string;
@@ -10,6 +12,7 @@ export interface Configuration {
   };
   moov: {
     accountID: string;
+    domain: string;
     publicKey: string;
     secretKey: string;
     webhookSecret: string;
@@ -56,6 +59,7 @@ function loadFromEnv(): Configuration {
     },
     moov: {
       accountID: process.env.MOOV_ACCOUNT_ID || "",
+      domain: process.env.MOOV_DOMAIN || "",
       publicKey: process.env.MOOV_PUBLIC_KEY || "",
       secretKey: process.env.MOOV_SECRET_KEY || "",
       webhookSecret: process.env.MOOV_WEBHOOK_SECRET || "",
@@ -69,13 +73,14 @@ function mergeAndValidate(
   envConfig: Configuration,
   fileConfig: Partial<Configuration>
 ): Configuration {
-  const config = Object.assign({}, envConfig, fileConfig);
+  const config = deepMerge(envConfig, fileConfig);
   const report = (name: string) => console.error(`error: configuration: missing ${name}`);
 
   if (!config.slack?.token) report("slack.token");
   if (!config.slack?.signingSecret) report("slack.signingSecret");
   if (!config.slack?.channel) report("slack.channel");
   if (!config.moov?.accountID) report("moov.accountID");
+  if (!config.moov?.domain) report("moov.domain");
   if (!config.moov?.publicKey) report("moov.publicKey");
   if (!config.moov?.secretKey) report("moov.secretKey");
   if (!config.moov?.webhookSecret) report("moov.webhookSecret");

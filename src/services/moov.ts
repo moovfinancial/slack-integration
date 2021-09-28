@@ -9,12 +9,34 @@ export interface MoovToken {
 }
 
 export async function getTransferData(transferID: string): Promise<any> {
-  // TODO: Create token and get transfer data
+  const config = configuration.active();
+  const token = await createToken();
+  const url = `${config.moov.apiUrl}/transfers/${transferID}`;
+
+  let transfer: any;
+  try {
+    transfer = await got({
+      url,
+      method: "GET",
+      searchParams: {
+        accountId: config.moov.accountID,
+      },
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+        Origin: config.moov.domain,
+      },
+    }).json();
+  } catch (err) {
+    const msg = `moov.getTransferData failed: ${buildGotErrorMessage(err)}`;
+    throw new Error(msg);
+  }
+
+  return transfer;
 }
 
 async function createToken(): Promise<MoovToken> {
   const config = configuration.active();
-  const url = config.moov.apiUrl + "/oauth2/token";
+  const url = `${config.moov.apiUrl}/oauth2/token`;
 
   let result: any;
   try {
@@ -29,7 +51,7 @@ async function createToken(): Promise<MoovToken> {
       password: config.moov.secretKey,
     }).json();
   } catch (err) {
-    const msg = `moov.fetchCredentials failed: ${buildGotErrorMessage(err)}`;
+    const msg = `moov.createToken failed: ${url} ${buildGotErrorMessage(err)}`;
     throw new Error(msg);
   }
 

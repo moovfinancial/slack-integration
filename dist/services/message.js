@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transferDetails = exports.transferMessage = void 0;
-function transferMessage(transferData) {
-    const amount = transferData.data.transfer.amount.value;
-    const type = transferData.type;
-    const source = transferData.data.transfer.source.account.displayName;
-    const destination = transferData.data.transfer.destination.account.displayName;
-    const header = type === "transfer.created" ? "ACH transfer created" : "ACH transfer completed :tada:";
-    const description = type === "transfer.created"
+function transferMessage(transfer) {
+    const amount = +transfer.amount.value / 100;
+    const status = transfer.status;
+    const source = transfer.source.account.displayName;
+    const destination = transfer.destination.account.displayName;
+    const header = status === "pending" ? "Transfer created" : "Transfer completed :tada:";
+    const description = status === "pending"
         ? "A transfer of *$" +
             amount +
             "* from *" +
@@ -38,32 +38,32 @@ function transferMessage(transferData) {
                     text: "Details",
                     emoji: true,
                 },
-                value: `${transferData.transferID}`,
+                value: `${transfer.transferID}`,
                 action_id: "inspectTransfer",
             },
         },
     ];
 }
 exports.transferMessage = transferMessage;
-function transferDetails(transferData) {
-    const amount = transferData.data.transfer.amount.value;
-    const type = transferData.type;
-    const source = transferData.data.transfer.source.account.displayName;
-    const sourceEmail = transferData.data.transfer.source.account.email;
-    const sourceBankAccountName = transferData.data.transfer.source.bankAccount.bankName;
-    const sourceBankAccountType = transferData.data.transfer.source.bankAccount.bankAccountType;
-    const sourceBankAccountLastNumber = transferData.data.transfer.source.bankAccount.lastFourAccountNumber;
-    const destination = transferData.data.transfer.destination.account.displayName;
-    const destinationEmail = transferData.data.transfer.destination.account.email;
-    const destinationBankAccountName = transferData.data.transfer.destination.bankAccount.bankName;
-    const destinationBankAccountType = transferData.data.transfer.destination.bankAccount.bankAccountType;
-    const destinationBankAccountLastNumber = transferData.data.transfer.destination.bankAccount.lastFourAccountNumber;
+function transferDetails(transfer) {
+    const amount = +transfer.amount.value / 100;
+    const type = transfer.type;
+    const source = transfer.source.account.displayName;
+    const sourceEmail = transfer.source.account.email;
+    const sourceBankAccountName = transfer.source.bankAccount.bankName;
+    const sourceBankAccountType = transfer.source.bankAccount.bankAccountType;
+    const sourceBankAccountLastNumber = transfer.source.bankAccount.lastFourAccountNumber;
+    const destination = transfer.destination.account.displayName;
+    const destinationEmail = transfer.destination.account.email;
+    const destinationBankAccountName = transfer.destination.bankAccount.bankName;
+    const destinationBankAccountType = transfer.destination.bankAccount.bankAccountType;
+    const destinationBankAccountLastNumber = transfer.destination.bankAccount.lastFourAccountNumber;
     const header = type === "transfer.created" ? "ACH transfer created" : ":tada:  ACH transfer complete";
     return {
         type: "modal",
         title: {
             type: "plain_text",
-            text: "My App",
+            text: "Moov",
             emoji: true,
         },
         blocks: [
@@ -138,7 +138,7 @@ function transferDetails(transferData) {
                     },
                     {
                         type: "mrkdwn",
-                        text: "*$" + amount + ".00 USD*",
+                        text: "*$" + amount + "*",
                     },
                 ],
             },

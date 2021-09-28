@@ -7,6 +7,7 @@ slack:
 
 moov:
   accountID: "xxxx"      # Moov account ID
+  domain: "xxxx"         # API key's domain (origin)
   publicKey: "xxxx"      # API key's public key
   secretKey: "xxxx"      # API key's secret key
   webhookSecret: "xxxx"  # Webhook's signing secret for message authentication

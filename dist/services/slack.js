@@ -41,6 +41,7 @@ async function sendTransferMessage(transferID) {
 }
 exports.sendTransferMessage = sendTransferMessage;
 async function showTransferDetails({ body, client, ack }) {
+    console.log("showTransferDetails: ", body);
     try {
         await ack();
         const config = configuration.active();

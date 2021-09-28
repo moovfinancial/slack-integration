@@ -18,11 +18,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.active = exports.load = void 0;
 const fs = __importStar(require("fs/promises"));
 const path = __importStar(require("path"));
 const yaml = __importStar(require("yaml"));
+const deepMerge_1 = __importDefault(require("./helpers/deepMerge"));
 let config;
 async function load() {
     const fileConfig = await loadFromFile();
@@ -56,6 +60,7 @@ function loadFromEnv() {
         },
         moov: {
             accountID: process.env.MOOV_ACCOUNT_ID || "",
+            domain: process.env.MOOV_DOMAIN || "",
             publicKey: process.env.MOOV_PUBLIC_KEY || "",
             secretKey: process.env.MOOV_SECRET_KEY || "",
             webhookSecret: process.env.MOOV_WEBHOOK_SECRET || "",
@@ -65,8 +70,8 @@ function loadFromEnv() {
     };
 }
 function mergeAndValidate(envConfig, fileConfig) {
-    var _a, _b, _c, _d, _e, _f, _g;
-    const config = Object.assign({}, envConfig, fileConfig);
+    var _a, _b, _c, _d, _e, _f, _g, _h;
+    const config = (0, deepMerge_1.default)(envConfig, fileConfig);
     const report = (name) => console.error(`error: configuration: missing ${name}`);
     if (!((_a = config.slack) === null || _a === void 0 ? void 0 : _a.token))
         report("slack.token");
@@ -76,11 +81,13 @@ function mergeAndValidate(envConfig, fileConfig) {
         report("slack.channel");
     if (!((_d = config.moov) === null || _d === void 0 ? void 0 : _d.accountID))
         report("moov.accountID");
-    if (!((_e = config.moov) === null || _e === void 0 ? void 0 : _e.publicKey))
+    if (!((_e = config.moov) === null || _e === void 0 ? void 0 : _e.domain))
+        report("moov.domain");
+    if (!((_f = config.moov) === null || _f === void 0 ? void 0 : _f.publicKey))
         report("moov.publicKey");
-    if (!((_f = config.moov) === null || _f === void 0 ? void 0 : _f.secretKey))
+    if (!((_g = config.moov) === null || _g === void 0 ? void 0 : _g.secretKey))
         report("moov.secretKey");
-    if (!((_g = config.moov) === null || _g === void 0 ? void 0 : _g.webhookSecret))
+    if (!((_h = config.moov) === null || _h === void 0 ? void 0 : _h.webhookSecret))
         report("moov.webhookSecret");
     return config;
 }

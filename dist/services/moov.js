@@ -27,12 +27,33 @@ const got_1 = __importDefault(require("got"));
 const configuration = __importStar(require("../configuration"));
 const buildGotErrorMessage_1 = __importDefault(require("../helpers/buildGotErrorMessage"));
 async function getTransferData(transferID) {
-    // TODO: Create token and get transfer data
+    const config = configuration.active();
+    const token = await createToken();
+    const url = `${config.moov.apiUrl}/transfers/${transferID}`;
+    let transfer;
+    try {
+        transfer = await (0, got_1.default)({
+            url,
+            method: "GET",
+            searchParams: {
+                accountId: config.moov.accountID,
+            },
+            headers: {
+                Authorization: `Bearer ${token.value}`,
+                Origin: config.moov.domain,
+            },
+        }).json();
+    }
+    catch (err) {
+        const msg = `moov.getTransferData failed: ${(0, buildGotErrorMessage_1.default)(err)}`;
+        throw new Error(msg);
+    }
+    return transfer;
 }
 exports.getTransferData = getTransferData;
 async function createToken() {
     const config = configuration.active();
-    const url = config.moov.apiUrl + "/oauth2/token";
+    const url = `${config.moov.apiUrl}/oauth2/token`;
     let result;
     try {
         result = await (0, got_1.default)({
@@ -47,7 +68,7 @@ async function createToken() {
         }).json();
     }
     catch (err) {
-        const msg = `moov.fetchCredentials failed: ${(0, buildGotErrorMessage_1.default)(err)}`;
+        const msg = `moov.createToken failed: ${url} ${(0, buildGotErrorMessage_1.default)(err)}`;
         throw new Error(msg);
     }
     const expiresOn = Math.round(new Date().getTime() / 1000) - result.expires_in;

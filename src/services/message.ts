@@ -1,14 +1,13 @@
 import { View } from "@slack/bolt";
 
-export function transferMessage(transferData: any) {
-  const amount = transferData.data.transfer.amount.value;
-  const type = transferData.type;
-  const source = transferData.data.transfer.source.account.displayName;
-  const destination = transferData.data.transfer.destination.account.displayName;
-  const header =
-    type === "transfer.created" ? "ACH transfer created" : "ACH transfer completed :tada:";
+export function transferMessage(transfer: any) {
+  const amount = +transfer.amount.value / 100;
+  const status = transfer.status;
+  const source = transfer.source.account.displayName;
+  const destination = transfer.destination.account.displayName;
+  const header = status === "pending" ? "Transfer created" : "Transfer completed :tada:";
   const description =
-    type === "transfer.created"
+    status === "pending"
       ? "A transfer of *$" +
         amount +
         "* from *" +
@@ -40,29 +39,26 @@ export function transferMessage(transferData: any) {
           text: "Details",
           emoji: true,
         },
-        value: `${transferData.transferID}`,
+        value: `${transfer.transferID}`,
         action_id: "inspectTransfer",
       },
     },
   ];
 }
 
-export function transferDetails(transferData: any): View {
-  const amount = transferData.data.transfer.amount.value;
-  const type = transferData.type;
-  const source = transferData.data.transfer.source.account.displayName;
-  const sourceEmail = transferData.data.transfer.source.account.email;
-  const sourceBankAccountName = transferData.data.transfer.source.bankAccount.bankName;
-  const sourceBankAccountType = transferData.data.transfer.source.bankAccount.bankAccountType;
-  const sourceBankAccountLastNumber =
-    transferData.data.transfer.source.bankAccount.lastFourAccountNumber;
-  const destination = transferData.data.transfer.destination.account.displayName;
-  const destinationEmail = transferData.data.transfer.destination.account.email;
-  const destinationBankAccountName = transferData.data.transfer.destination.bankAccount.bankName;
-  const destinationBankAccountType =
-    transferData.data.transfer.destination.bankAccount.bankAccountType;
-  const destinationBankAccountLastNumber =
-    transferData.data.transfer.destination.bankAccount.lastFourAccountNumber;
+export function transferDetails(transfer: any): View {
+  const amount = +transfer.amount.value / 100;
+  const type = transfer.type;
+  const source = transfer.source.account.displayName;
+  const sourceEmail = transfer.source.account.email;
+  const sourceBankAccountName = transfer.source.bankAccount.bankName;
+  const sourceBankAccountType = transfer.source.bankAccount.bankAccountType;
+  const sourceBankAccountLastNumber = transfer.source.bankAccount.lastFourAccountNumber;
+  const destination = transfer.destination.account.displayName;
+  const destinationEmail = transfer.destination.account.email;
+  const destinationBankAccountName = transfer.destination.bankAccount.bankName;
+  const destinationBankAccountType = transfer.destination.bankAccount.bankAccountType;
+  const destinationBankAccountLastNumber = transfer.destination.bankAccount.lastFourAccountNumber;
   const header =
     type === "transfer.created" ? "ACH transfer created" : ":tada:  ACH transfer complete";
 
@@ -70,7 +66,7 @@ export function transferDetails(transferData: any): View {
     type: "modal",
     title: {
       type: "plain_text",
-      text: "My App",
+      text: "Moov",
       emoji: true,
     },
     blocks: [
@@ -147,7 +143,7 @@ export function transferDetails(transferData: any): View {
           },
           {
             type: "mrkdwn",
-            text: "*$" + amount + ".00 USD*",
+            text: "*$" + amount + "*",
           },
         ],
       },

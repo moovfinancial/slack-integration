@@ -20,6 +20,7 @@ export async function sendTransferMessage(transferID: string) {
 }
 
 export async function showTransferDetails({ body, client, ack }: any) {
+  console.log("showTransferDetails: ", body);
   try {
     await ack();
 
