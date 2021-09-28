@@ -3,11 +3,14 @@ import * as configuration from "../configuration";
 import { transferDetails, transferMessage } from "./message";
 import { getTransferData } from "./moov";
 
-export async function sendTransferMessage(transferID: string) {
+export async function sendTransferMessage(
+  type: "transfer.created" | "transfer.updated",
+  transferID: string
+) {
   try {
     const config = configuration.active();
     const transferData = await getTransferData(transferID);
-    const blocks = transferMessage(transferData);
+    const blocks = transferMessage(type, transferData);
     const app = application.active();
 
     await app.client.chat.postMessage({
@@ -20,7 +23,6 @@ export async function sendTransferMessage(transferID: string) {
 }
 
 export async function showTransferDetails({ body, client, ack }: any) {
-  console.log("showTransferDetails: ", body);
   try {
     await ack();
 

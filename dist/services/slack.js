@@ -24,11 +24,11 @@ const application = __importStar(require("../application"));
 const configuration = __importStar(require("../configuration"));
 const message_1 = require("./message");
 const moov_1 = require("./moov");
-async function sendTransferMessage(transferID) {
+async function sendTransferMessage(type, transferID) {
     try {
         const config = configuration.active();
         const transferData = await (0, moov_1.getTransferData)(transferID);
-        const blocks = (0, message_1.transferMessage)(transferData);
+        const blocks = (0, message_1.transferMessage)(type, transferData);
         const app = application.active();
         await app.client.chat.postMessage({
             channel: config.slack.channel,
@@ -41,7 +41,6 @@ async function sendTransferMessage(transferID) {
 }
 exports.sendTransferMessage = sendTransferMessage;
 async function showTransferDetails({ body, client, ack }) {
-    console.log("showTransferDetails: ", body);
     try {
         await ack();
         const config = configuration.active();

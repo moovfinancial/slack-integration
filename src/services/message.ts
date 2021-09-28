@@ -1,13 +1,12 @@
 import { View } from "@slack/bolt";
 
-export function transferMessage(transfer: any) {
+export function transferMessage(type: "transfer.created" | "transfer.updated", transfer: any) {
   const amount = +transfer.amount.value / 100;
-  const status = transfer.status;
   const source = transfer.source.account.displayName;
   const destination = transfer.destination.account.displayName;
-  const header = status === "pending" ? "Transfer created" : "Transfer completed :tada:";
+  const header = type === "transfer.created" ? "Transfer created" : "Transfer completed :tada:";
   const description =
-    status === "pending"
+    type === "transfer.created"
       ? "A transfer of *$" +
         amount +
         "* from *" +
@@ -48,7 +47,7 @@ export function transferMessage(transfer: any) {
 
 export function transferDetails(transfer: any): View {
   const amount = +transfer.amount.value / 100;
-  const type = transfer.type;
+  const status = transfer.status;
   const source = transfer.source.account.displayName;
   const sourceEmail = transfer.source.account.email;
   const sourceBankAccountName = transfer.source.bankAccount.bankName;
@@ -59,8 +58,7 @@ export function transferDetails(transfer: any): View {
   const destinationBankAccountName = transfer.destination.bankAccount.bankName;
   const destinationBankAccountType = transfer.destination.bankAccount.bankAccountType;
   const destinationBankAccountLastNumber = transfer.destination.bankAccount.lastFourAccountNumber;
-  const header =
-    type === "transfer.created" ? "ACH transfer created" : ":tada:  ACH transfer complete";
+  const header = status === "pending" ? "ACH transfer created" : ":tada:  ACH transfer complete";
 
   return {
     type: "modal",

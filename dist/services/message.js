@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transferDetails = exports.transferMessage = void 0;
-function transferMessage(transfer) {
+function transferMessage(type, transfer) {
     const amount = +transfer.amount.value / 100;
-    const status = transfer.status;
     const source = transfer.source.account.displayName;
     const destination = transfer.destination.account.displayName;
-    const header = status === "pending" ? "Transfer created" : "Transfer completed :tada:";
-    const description = status === "pending"
+    const header = type === "transfer.created" ? "Transfer created" : "Transfer completed :tada:";
+    const description = type === "transfer.created"
         ? "A transfer of *$" +
             amount +
             "* from *" +
@@ -47,7 +46,7 @@ function transferMessage(transfer) {
 exports.transferMessage = transferMessage;
 function transferDetails(transfer) {
     const amount = +transfer.amount.value / 100;
-    const type = transfer.type;
+    const status = transfer.status;
     const source = transfer.source.account.displayName;
     const sourceEmail = transfer.source.account.email;
     const sourceBankAccountName = transfer.source.bankAccount.bankName;
@@ -58,7 +57,7 @@ function transferDetails(transfer) {
     const destinationBankAccountName = transfer.destination.bankAccount.bankName;
     const destinationBankAccountType = transfer.destination.bankAccount.bankAccountType;
     const destinationBankAccountLastNumber = transfer.destination.bankAccount.lastFourAccountNumber;
-    const header = type === "transfer.created" ? "ACH transfer created" : ":tada:  ACH transfer complete";
+    const header = status === "pending" ? "ACH transfer created" : ":tada:  ACH transfer complete";
     return {
         type: "modal",
         title: {

@@ -10,20 +10,17 @@ export async function handleWebhookEvent(req: Request, res: Response): Promise<v
 
   console.log(`handleWebhookEvent: `, req.body);
 
-  switch (req.body?.type) {
-    case "transfer.updated":
-      await handleTransferEvent(req.body);
-      break;
+  const type: string = req.body.type;
+  if (type === "transfer.created" || type === "transfer.updated") {
+    await handleTransferEvent(type, req.body);
   }
 
   res.sendStatus(200);
 }
 
-async function handleTransferEvent(body: any) {
-  const transferID: string = body.data?.transferID;
-  const status: string = body.data?.status;
+async function handleTransferEvent(type: "transfer.created" | "transfer.updated", body: any) {
+  if (type === "transfer.updated" && body.data?.status !== "completed") return;
 
-  if (status === "completed") {
-    await sendTransferMessage(transferID);
-  }
+  const transferID: string = body.data?.transferID || body.data?.TransferID;
+  await sendTransferMessage(type, transferID);
 }
