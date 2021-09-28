@@ -2,7 +2,7 @@
 
 A sample application that routes Moov transfer events to a Slack channel. Click on the notifcation to see additional transfer details.
 
-![Moov for Slack notification](https://user-images.githubusercontent.com/574793/135161867-bf1363cd-4079-40a3-bb9d-b84ca37e674f.png)
+![Moov for Slack notifications](https://user-images.githubusercontent.com/574793/135162861-8da35b0b-de76-4f45-a19a-a53285365228.png)
 
 * [TypeScript](https://www.typescriptlang.org/)
 * [Node.js](https://nodejs.org/)
