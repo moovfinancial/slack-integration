@@ -8,7 +8,7 @@ A sample application that routes Moov transfer events to a Slack channel. You ca
 
 **Moov for Slack** is a [Node/Express](https://expressjs.com/) application that uses the [Moov API](https://docs.moov.io) and the [Slack Bolt SDK](https://api.slack.com/tools/bolt).
 
-![Slack integration_- How it works](https://user-images.githubusercontent.com/574793/135172753-5221b83f-b3ff-466c-b334-3f6fe1c70e68.png)
+![Slack integration_ How it works](https://user-images.githubusercontent.com/574793/135174864-8f28e8ef-e2a2-41dc-a4ce-8b08314ce98a.png)
 
 ## Setting up the app
 
