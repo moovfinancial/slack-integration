@@ -1,6 +1,8 @@
 <div>
-  <img alt="Version" src="https://img.shields.io/github/package-json/v/moovfinancial/slack-integration?style=flat">
-  <img alt="License" src="https://img.shields.io/github/license/moovfinancial/slack-integration=flat">
+  <a href="https://github.com/moovfinancial/slack-integration/blob/main/CHANGELOG.md">
+    <img alt="Version" src="https://img.shields.io/github/package-json/v/moovfinancial/slack-integration?style=flat"></a>
+  <a href="https://github.com/moovfinancial/slack-integration/blob/main/LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/moovfinancial/slack-integration?style=flat"></a>
   <a href="https://docs.moov.io">
     <img alt="Learn more" src="https://img.shields.io/badge/learn-docs.moov.io-success?style=flat"></a>
   <a href="https://twitter.com/moov">
