@@ -87,11 +87,11 @@ yarn build:watch
 yarn start:watch
 ```
 
-## Running in Production
+## Deployment
 
-We recommend using a secrets management solution and the template at `./config.example.yml` to create the configuration file and inject it into your production environment. Here at Moov we use HashiCorp's Vault to inject configuration files into Kubernetes pods. Your solution might look a little different.
+By default the application will load and parse a configuration file from the filesystem at `/config/config.yml`. This location can be overriden by setting the `CONFIG_FILE_PATH` environment variable. Since this file contains configuration secrets we recommend using a secrets management facility such as [Docker Secrets](https://docs.docker.com/engine/swarm/secrets/), [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/), or [Vault](https://www.vaultproject.io/docs/platform/k8s/injector) to mount and/or render this file.
 
-If the app can't find the configuration file, or the file is missing configuration values, then it will fall back to using environment variables. Environment variables are not a secure way to store secrets, but they're supported here to help you get up and running quickly if you don't yet use a more robust secrets management solution.
+An example configuration is available in the root of this repository at `config.example.yml` along with the associated environment variable for each option.
 
 ## Running with Docker
 

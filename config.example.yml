@@ -1,15 +1,16 @@
 # See the README for more information and proper use of this file.
+# Values in this file override environment variables.
 
 slack:
-  token: "xxxx"          # Slack bot token
-  signingSecret: "xxxx"  # Signing secret for message authentication
-  channel: "xxxx"        # Channel to receive notifications
+  token: "xxxx"          # Slack bot token. Also settable via $SLACK_TOKEN.
+  signingSecret: "xxxx"  # Signing secret for message authentication. Also settable via $SLACK_SIGNING_SECRET.
+  channel: "xxxx"        # Channel to receive notifications. Also settable via $SLACK_CHANNEL.
 
 moov:
-  accountID: "xxxx"      # Moov account ID
-  domain: "xxxx"         # API key's domain (origin)
-  publicKey: "xxxx"      # API key's public key
-  secretKey: "xxxx"      # API key's secret key
-  webhookSecret: "xxxx"  # Webhook's signing secret for message authentication
+  accountID: "xxxx"      # Moov account ID. Also settable via $MOOV_ACCOUNT_ID.
+  domain: "xxxx"         # API key's domain (origin). Also settable via $MOOV_DOMAIN.
+  publicKey: "xxxx"      # API key's public key. Also settable via $MOOV_PUBLIC_KEY.
+  secretKey: "xxxx"      # API key's secret key. Also settable via $MOOV_SECRET_KEY.
+  webhookSecret: "xxxx"  # Webhook's signing secret for message authentication. Also settable via $MOOV_WEBHOOK_SECRET.
 
-port: 8080               # Express server port
+port: 8080               # Express server port. Also settable via $PORT.
