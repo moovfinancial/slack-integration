@@ -11,7 +11,11 @@
 
 # Moov for Slack
 
-A sample application that routes Moov transfer events to a Slack channel. You can configure and deploy Moov for Slack to see it in action, and then fork the repository to customize it for your organization's needs.
+This Slack integration is a Moov OSS project allowing you to listen for and observe monetary transfers as they happen. Being able to observe updates on monetary transfers real-time helps with monitoring, transparency, and fraud prevention. The application routes transfer events to a Slack channel.
+
+Once you've configured the project to run on your server and connect to your chosen Slack channel, it will listen for webhook events related to transfers. When a transfer has been created or completed, it will post a message to the predetermined Slack channel
+
+You can set up and deploy Moov for Slack to see it in action, and then fork the repository to customize it for your organization's needs.
 
 ![Moov for Slack notifications](https://user-images.githubusercontent.com/574793/135163070-fdd5ad49-7a85-4a7e-8f9d-8dc8ee263702.png)
 
