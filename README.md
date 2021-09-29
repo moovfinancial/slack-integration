@@ -27,7 +27,7 @@ You can set up and deploy Moov for Slack to see it in action, and then fork the 
 
 ## Prerequisites
 
-These prerequisites have to be in place before you can configure and launch **Moov for Slack**
+These prerequisites have to be in place before you can configure and launch **Moov for Slack**.
 
 **:ballot_box_with_check:  A configuration file**
 
