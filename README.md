@@ -25,17 +25,17 @@ A sample application that routes Moov transfer events to a Slack channel. You ca
 
 These prerequisites have to be in place before you can configure and launch **Moov for Slack**
 
-**:ballot_box_with_check: A configuration file**
+**:ballot_box_with_check:  A configuration file**
 
 1. Clone this repository to your local device.
 2. Create a folder at the root named `./config`.
 3. Copy `./config.example.yml` to the new folder and rename it to `./config/config.yml`.
 
-**:ballot_box_with_check: A publicly addressable host or IP address**
+**:ballot_box_with_check:  A publicly addressable host or IP address**
 
 You'll need to host **Moov for Slack** at a publicly addressable host so both Moov and Slack can reach it. If you're developing locally, you can use a service like [ngrok](https://ngrok.com/) to tunnel messages from a publicly addressable host to your local device.
 
-**:ballot_box_with_check: Slack app**
+**:ballot_box_with_check:  Slack app**
 
 You'll need a Slack app to run inside your workspace and listen for notifications from **Moov for Slack**.
 
