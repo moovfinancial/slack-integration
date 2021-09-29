@@ -1,5 +1,3 @@
-# Moov for Slack
-
 <div>
   <img alt="Version" src="https://img.shields.io/github/package-json/v/moovfinancial/moov-slack-integration?style=flat">
   <img alt="License" src="https://img.shields.io/github/license/moovfinancial/slack-integration=flat">
@@ -8,6 +6,8 @@
   <a href="https://twitter.com/moov">
     <img alt="Moov on Twitter" src="https://img.shields.io/badge/follow-twitter/moov-1da1f2?style=flat"></a>
 </div>
+
+# Moov for Slack
 
 A sample application that routes Moov transfer events to a Slack channel. You can configure and deploy Moov for Slack to see it in action, and then fork the repository to customize it for your organization's needs.
 
