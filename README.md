@@ -1,5 +1,14 @@
 # Moov for Slack
 
+<div>
+  <img alt="Version" src="https://img.shields.io/github/package-json/v/moovfinancial/moov-slack-integration?style=flat">
+  <img alt="License" src="https://img.shields.io/github/license/moovfinancial/slack-integration=flat">
+  <a href="https://docs.moov.io">
+    <img alt="Learn more" src="https://img.shields.io/badge/learn-docs.moov.io-success?style=flat"></a>
+  <a href="https://twitter.com/moov">
+    <img alt="Moov on Twitter" src="https://img.shields.io/badge/follow-twitter/moov-1da1f2?style=flat"></a>
+</div>
+
 A sample application that routes Moov transfer events to a Slack channel. You can configure and deploy Moov for Slack to see it in action, and then fork the repository to customize it for your organization's needs.
 
 ![Moov for Slack notifications](https://user-images.githubusercontent.com/574793/135163070-fdd5ad49-7a85-4a7e-8f9d-8dc8ee263702.png)
@@ -10,44 +19,85 @@ A sample application that routes Moov transfer events to a Slack channel. You ca
 
 ![Slack integration_ How it works](https://user-images.githubusercontent.com/574793/135174864-8f28e8ef-e2a2-41dc-a4ce-8b08314ce98a.png)
 
-## Setting up the app
+## Prerequisites
 
-## Running the app locally
+These prerequisites have to be in place before you can configure and launch **Moov for Slack**
 
-## Running the app in production
+**:ballot_box_with_check: A configuration file**
 
+1. Clone this repository to your local device.
+2. Create a folder at the root named `./config`.
+3. Copy `./config.example.yml` to the new folder and rename it to `./config/config.yml`.
 
-## Building and running the app
+**:ballot_box_with_check: A publicly addressable host or IP address**
+
+You'll need to host **Moov for Slack** at a publicly addressable host so both Moov and Slack can reach it. If you're developing locally, you can use a service like [ngrok](https://ngrok.com/) to tunnel messages from a publicly addressable host to your local device.
+
+**:ballot_box_with_check: Slack app**
+
+You'll need a Slack app to run inside your workspace and listen for notifications from **Moov for Slack**.
+
+1. Navigate to https://api.slack.com/apps.
+2. If you don't already have one, create and configure a new Slack app.
+3. Copy these configuration values to the `slack` section in  `./config/config.yml`:
+   * The app's **bot token**
+   * The app's **signing secret**
+   * The name of the Slack **channel** where messages should appear, e.g., `#moov-notifications` or `@Amanda`
+4. Turn on interactivity for the Slack app and set the **request URL** to:  
+   `https://<your publicly addressable host>/slack/events`
+
+**:ballot_box_with_check: Moov Account ID**
+
+1. Navigate to https://dashboard.moov.io > Settings > Business details.
+2. Copy **account ID** to the `moov` section in `./config/config.yml`:
+
+**:ballot_box_with_check: Moov API key**
+
+1. Navigate to https://dashboard.moov.io > Developers > API Keys.
+2. Create an API key for **Moov for Slack**.
+3. Copy these configuration values to the `moov` section in `./config/config.yml`:
+   * The key's **domain**, which you can set to `https://moovforslack.<yourcompany>.com`
+   * The key's **public key**
+   * The key's **secret key**
+
+**:ballot_box_with_check: Moov Webhook**
+
+1. Navigate to https://dashboard.moov.io > Developers > Webhooks.
+2. Create a new webhook.
+3. Set the URL to `https://<your publicaly addressable host>/webhook/transfer`.
+4. Copy the **webhook signing secret** to the `moov` section in `./config/config.yml`.
+
+## Building and running
+
+Use the scripts in `package.json` to build and run:
 
 ```shell
 yarn install
-yarn run build
-yarn run start
+yarn build
+yarn start
 ```
 
-Before you can run the app, you'll need to configure it as described below.
+These commands are also available when needed:
 
-## Configuring the app
+```shell
+yarn clean
+yarn build:watch
+yarn start:watch
+```
 
-The app loads secrets, including Slack credentials and Moov credentials, from `./config/config.yml`. Use a secrets management solution and the template at `./config.sample.yml` to create the file and inject it into your production environment. Here at Moov we use HashiCorp's Vault to inject configuration files into Kubernetes pods. Your solution might look a little different.
+## Running in Production
+
+We recommend using a secrets management solution and the template at `./config.example.yml` to create the configuration file and inject it into your production environment. Here at Moov we use HashiCorp's Vault to inject configuration files into Kubernetes pods. Your solution might look a little different.
 
 If the app can't find the configuration file, or the file is missing configuration values, then it will fall back to using environment variables. Environment variables are not a secure way to store secrets, but they're supported here to help you get up and running quickly if you don't yet use a more robust secrets management solution.
 
 ## Running with Docker
 
-Use `./Dockerfile` to build, publish, and run Docker in your container environment.
+Use `./Dockerfile` as a starting point to run **Moov for Slack** in a container environment.
 
-## Running locally
+## Contributing
 
-To run the app locally, copy `./config.sample.yml` to `./config/config.yml` and fill in the credentials. Git will ignore local configuration files. The app must have an exposed IP address and port to receive Moov webhook notifications.
+Yes please! Be sure to submit an issue before submitting a pull request.
 
-The build and start commands both have watch versions for local development:
-
-```shell
-yarn run build:watch
-yarn run start:watch
-```
-
-
-
+Moov would like to thank [Arsenio Aguirre](https://github.com/aaaguirrep) for getting this project off to a great start.
 

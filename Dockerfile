@@ -10,6 +10,8 @@ COPY ./yarn.lock .
 RUN yarn install --frozen-lockfile
 RUN yarn build
 
+# TODO: Use a secrets management solution to inject the configuration file at ./config/config.yml
+
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:${PORT:-8080}/ || exit 1
 
