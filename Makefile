@@ -19,7 +19,7 @@ test:
 clean:
 	rm -rf node_modules
 
-release: clean install build
+release: clean install build test
 ifeq ($(VERSION),$(TAG_VERSION))
 	docker build --pull -t moovfinancial/slack-integration:$(VERSION) -f Dockerfile .
 	docker push moovfinancial/slack-integration:$(VERSION)

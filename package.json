@@ -12,7 +12,8 @@
     "build:watch": "tsc --watch",
     "start": "node ./dist/index.js",
     "start:watch": "nodemon ./dist/index.js --watch ./dist --watch ./.env",
-    "sendTransferEvent": "node ./dist/scripts/sendTransferEvent.js"
+    "sendTransferEvent": "node ./dist/scripts/sendTransferEvent.js",
+    "test": "echo TODO"
   },
   "devDependencies": {
     "@types/node": "^16.9.1",
