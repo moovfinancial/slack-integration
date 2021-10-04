@@ -2,23 +2,36 @@ import { Request, Response } from "express";
 import { signatureIsValid } from "../services/authentication";
 import { sendTransferMessage } from "../services/slack";
 
+type EventHandler = (event: string, body: any) => Promise<void>;
+
+const eventMap: Record<string, EventHandler> = {
+  "transfer.created": handleTransferEvent,
+  "transfer.updated": handleTransferEvent,
+  // --> Add additional event handlers here
+};
+
 export async function handleWebhookEvent(req: Request, res: Response): Promise<void> {
   if (!signatureIsValid(req.headers)) {
     console.warn(`receiveWebhookEvent: invalid signature`);
     return;
   }
-
   console.log(`handleWebhookEvent: `, req.body);
 
-  const type: string = req.body.type;
-  if (type === "transfer.created" || type === "transfer.updated") {
-    await handleTransferEvent(type, req.body);
+  const event: string = req.body.type;
+  const handler = eventMap[event];
+
+  if (handler) {
+    try {
+      await handler(event, req.body);
+    } catch (err: any) {
+      console.error("handleWebhookEvent: handler failed: ", err?.message || err);
+    }
   }
 
   res.sendStatus(200);
 }
 
-async function handleTransferEvent(type: "transfer.created" | "transfer.updated", body: any) {
+async function handleTransferEvent(type: string, body: any) {
   if (type === "transfer.updated" && body.data?.status !== "completed") return;
 
   const transferID: string = body.data?.transferID || body.data?.TransferID;

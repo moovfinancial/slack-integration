@@ -3,10 +3,7 @@ import * as configuration from "../configuration";
 import { transferDetails, transferMessage } from "./message";
 import { getTransferData } from "./moov";
 
-export async function sendTransferMessage(
-  type: "transfer.created" | "transfer.updated",
-  transferID: string
-) {
+export async function sendTransferMessage(type: string, transferID: string) {
   try {
     const config = configuration.active();
     const transferData = await getTransferData(transferID);

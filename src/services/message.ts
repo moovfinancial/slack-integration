@@ -1,6 +1,6 @@
 import { View } from "@slack/bolt";
 
-export function transferMessage(type: "transfer.created" | "transfer.updated", transfer: any) {
+export function transferMessage(type: string, transfer: any) {
   const amount = +transfer.amount.value / 100;
   const source = transfer.source.account.displayName;
   const destination = transfer.destination.account.displayName;
