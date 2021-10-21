@@ -1,6 +1,6 @@
 {
   "name": "slack-integration",
-  "version": "1.0.0",
+  "version": "v1.0.1",
   "description": "Get Moov transfer notifications in Slack",
   "main": "dist/index.js",
   "repository": "https://github.com/moov-io/slack-integration",
