@@ -42,7 +42,9 @@ exports.active = active;
 async function loadFromFile() {
     let config = {};
     try {
-        const configPath = process.env.CONFIG_FILE_PATH || path.join(process.cwd(), "/config/config.yml");
+        const configPath = process.env.CONFIG_FILE_PATH ||
+            process.env.APP_CONFIG_SECRETS ||
+            path.join(process.cwd(), "/config/config.yml");
         const contents = await fs.readFile(configPath, "utf8");
         config = yaml.parse(contents);
     }

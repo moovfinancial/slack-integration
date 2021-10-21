@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+
+jobs:
+  build:
+    name: Yarn Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }} # sets ref to the last commit hash
+
+      - name: Install Node and Yarn
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "yarn"
+
+      - name: Install
+        run: make install
+
+      - name: Build
+        run: make build
+
+      - name: Test
+        run: make test
