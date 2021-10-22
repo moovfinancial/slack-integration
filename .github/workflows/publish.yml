@@ -1,6 +1,7 @@
 name: Publish Docker
 
 on:
+  workflow_dispatch:
   push:
     tags: ["v*.*.*"]
 
@@ -20,12 +21,14 @@ jobs:
           node-version: "14"
           cache: "yarn"
 
-      - name: Docker Login
+      - name: Docker login
         run: |+
+          echo DOCKERHUB_PASSWORD: ${DOCKERHUB_PASSWORD:+set}
+          echo DOCKERHUB_USERNAME: ${DOCKERHUB_USERNAME:+set}
           echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Docker
+      - name: Docker push
         run: make release
