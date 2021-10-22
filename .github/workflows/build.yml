@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     name: Yarn Build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Clone repo
         uses: actions/checkout@v2

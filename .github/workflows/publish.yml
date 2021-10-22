@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Yarn Build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Clone repo
         uses: actions/checkout@v2
@@ -19,13 +19,6 @@ jobs:
         with:
           node-version: "14"
           cache: "yarn"
-
-      - name: Docker Login
-        run: |+
-          echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Docker
         run: make release
