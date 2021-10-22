@@ -66,7 +66,7 @@ You'll need a Slack app to run inside your workspace and listen for notification
 
 1. Navigate to https://dashboard.moov.io > Developers > Webhooks.
 2. Create a new webhook.
-3. Set the URL to `https://<your publicaly addressable host>/webhook/transfer`.
+3. Set the URL to `https://<your publicaly addressable host>/webhooks`.
 4. Select the `transfer.created` and `transfer.updated` events. If you fork and customize this app, be sure to subscribe to any additional events you'd like to receive.
 5. Copy the **webhook signing secret** to the `moov` section in `./config/config.yml`.
 

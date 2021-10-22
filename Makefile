@@ -3,21 +3,21 @@ COMMIT_HASH :=$(shell git rev-parse --short HEAD)
 TAG_VERSION := $(shell git describe --tags --abbrev=0)
 
 .PHONY: build test docker clean
-build:
-	yarn run build
-
-run:
-	docker run --read-only \
-		-p 8080:8080 moovfinancial/slack-integration:$(VERSION)
+clean:
+	rm -rf node_modules
 
 install:
 	yarn install --frozen-lockfile
 
+build:
+	yarn run build
+
 test:
 	yarn run test
 
-clean:
-	rm -rf node_modules
+run:
+	docker run --read-only \
+		-p 8080:8080 moovfinancial/slack-integration:$(VERSION)
 
 release: clean install build test
 ifeq ($(VERSION),$(TAG_VERSION))

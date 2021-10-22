@@ -16,7 +16,7 @@ export async function start(config: Configuration) {
   receiver.router.use(express.json());
   receiver.router.use(express.urlencoded({ extended: true }));
 
-  receiver.router.post("/webhook/transfer", handleWebhookEvent);
+  receiver.router.post("/webhooks", handleWebhookEvent);
   receiver.router.get("/ping", async (_, res) => res.sendStatus(200));
 
   await application.start(config.port);
