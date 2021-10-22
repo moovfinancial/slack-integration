@@ -20,5 +20,12 @@ jobs:
           node-version: "14"
           cache: "yarn"
 
+      - name: Docker Login
+        run: |+
+          echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+
       - name: Docker
         run: make release
