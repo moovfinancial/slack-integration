@@ -15,7 +15,7 @@ async function start(config) {
     application.action("inspectTransfer", slack_1.showTransferDetails);
     receiver.router.use(express_1.default.json());
     receiver.router.use(express_1.default.urlencoded({ extended: true }));
-    receiver.router.post("/webhook/transfer", moov_1.handleWebhookEvent);
+    receiver.router.post("/webhooks", moov_1.handleWebhookEvent);
     receiver.router.get("/ping", async (_, res) => res.sendStatus(200));
     await application.start(config.port);
     console.log(`listening on port ${config.port}`);

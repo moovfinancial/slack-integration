@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Yarn Build
+    name: Clone, install, build, and test
     runs-on: ubuntu-latest
     steps:
       - name: Clone repo

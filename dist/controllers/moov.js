@@ -10,7 +10,12 @@ const eventMap = {
 };
 async function handleWebhookEvent(req, res) {
     if (!(0, authentication_1.signatureIsValid)(req.headers)) {
-        console.warn(`receiveWebhookEvent: invalid signature`);
+        const headers = {};
+        ["x-timestamp", "x-nonce", "x-webhook-id", "x-signature"].forEach((key) => {
+            headers[key] = req.headers[key] || "";
+        });
+        console.warn(`handleWebhookEvent: invalid signature: headers:`, headers);
+        res.sendStatus(403);
         return;
     }
     console.log(`handleWebhookEvent: `, req.body);

@@ -12,9 +12,15 @@ const eventMap: Record<string, EventHandler> = {
 
 export async function handleWebhookEvent(req: Request, res: Response): Promise<void> {
   if (!signatureIsValid(req.headers)) {
-    console.warn(`receiveWebhookEvent: invalid signature`);
+    const headers: Record<string, string> = {};
+    ["x-timestamp", "x-nonce", "x-webhook-id", "x-signature"].forEach((key) => {
+      headers[key] = (req.headers[key] as string) || "";
+    });
+    console.warn(`handleWebhookEvent: invalid signature: headers:`, headers);
+    res.sendStatus(403);
     return;
   }
+
   console.log(`handleWebhookEvent: `, req.body);
 
   const event: string = req.body.type;

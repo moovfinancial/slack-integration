@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Yarn Build
+    name: Build docker image and publish
     runs-on: ubuntu-latest
     steps:
       - name: Clone repo
