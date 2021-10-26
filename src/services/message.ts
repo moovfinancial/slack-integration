@@ -8,13 +8,13 @@ export function transferMessage(type: string, transfer: any) {
   const description =
     type === "transfer.created"
       ? "A transfer of *$" +
-        amount +
+        amount.toFixed(2) +
         "* from *" +
         source +
-        "s* to *" +
+        "* to *" +
         destination +
         "* is pending."
-      : "*" + source + "* sent *$" + amount + "* to *" + destination + "*.";
+      : "*" + source + "* sent *$" + amount.toFixed(2) + "* to *" + destination + "*.";
 
   return [
     {
@@ -141,7 +141,7 @@ export function transferDetails(transfer: any): View {
           },
           {
             type: "mrkdwn",
-            text: "*$" + amount + "*",
+            text: "*$" + amount.toFixed(2) + "*",
           },
         ],
       },
