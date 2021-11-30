@@ -1,20 +1,37 @@
 import { View } from "@slack/bolt";
+import { withoutBody } from "got/dist/source";
 
 export function transferMessage(type: string, transfer: any) {
   const amount = +transfer.amount.value / 100;
   const source = transfer.source.account.displayName;
   const destination = transfer.destination.account.displayName;
-  const header = type === "transfer.created" ? "Transfer created" : "Transfer completed :tada:";
-  const description =
-    type === "transfer.created"
-      ? "A transfer of *$" +
-        amount.toFixed(2) +
-        "* from *" +
-        source +
-        "* to *" +
-        destination +
-        "* is pending."
-      : "*" + source + "* sent *$" + amount.toFixed(2) + "* to *" + destination + "*.";
+
+  let header = null;
+  let description = null;
+  if (type === "transfer.created") {
+    header = "Transfer created";
+    description =
+      "A transfer of *$" +
+      amount.toFixed(2) +
+      "* from *" +
+      source +
+      "* to *" +
+      destination +
+      "* is pending.";
+  } else if (type === "transfer.updated") {
+    if (transfer.status === "completed") {
+      header = "Transfer completed :tada:";
+      description = "*" + source + "* sent *$" + amount.toFixed(2) + "* to *" + destination + "*.";
+    } else if (transfer.status === "failed") {
+      header = "Transfer failed :x:";
+      description =
+        "*" + source + "* failed to send *$" + amount.toFixed(2) + "* to *" + destination + "*.";
+    } else if (transfer.status === "reversed") {
+      header = "Transfer reversed :leftwards_arrow_with_hook:";
+      description =
+        "*" + destination + "* sent *$" + amount.toFixed(2) + "* back to *" + source + "*.";
+    }
+  }
 
   return [
     {

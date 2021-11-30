@@ -31,7 +31,7 @@ import { generateSignature } from "../services/authentication";
         type: "transfer.updated",
         data: {
           transferID: process.argv[2],
-          status: "completed",
+          status: "failed",
         },
         createdOn: new Date().toISOString(),
       },
