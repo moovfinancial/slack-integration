@@ -9,7 +9,7 @@ import { generateSignature } from "../services/authentication";
 (async () => {
   await configuration.load();
   const config = configuration.active();
-  const url = `http://localhost:${config.port}/webhooks`;
+  const url = `http://localhost:${configuration.active().port}/webhooks`;
 
   const timestamp = new Date().toISOString();
   const nonce = randomUUID();

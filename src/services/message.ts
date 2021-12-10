@@ -1,5 +1,4 @@
-import { View } from "@slack/bolt";
-import { withoutBody } from "got/dist/source";
+import { MrkdwnElement, View } from "@slack/bolt";
 
 export function transferMessage(type: string, transfer: any) {
   const amount = +transfer.amount.value / 100;
@@ -67,15 +66,27 @@ export function transferDetails(transfer: any): View {
   const status = transfer.status;
   const source = transfer.source.account.displayName;
   const sourceEmail = transfer.source.account.email;
-  const sourceBankAccountName = transfer.source.bankAccount.bankName;
-  const sourceBankAccountType = transfer.source.bankAccount.bankAccountType;
-  const sourceBankAccountLastNumber = transfer.source.bankAccount.lastFourAccountNumber;
   const destination = transfer.destination.account.displayName;
   const destinationEmail = transfer.destination.account.email;
-  const destinationBankAccountName = transfer.destination.bankAccount.bankName;
-  const destinationBankAccountType = transfer.destination.bankAccount.bankAccountType;
-  const destinationBankAccountLastNumber = transfer.destination.bankAccount.lastFourAccountNumber;
-  const header = status === "pending" ? "ACH transfer created" : ":tada:  ACH transfer complete";
+
+  const sourceBlock = getDetailsBlock(transfer.source);
+  const destinationBlock = getDetailsBlock(transfer.destination);
+
+  let header = "";
+  switch (status) {
+    case "pending":
+      header = "Transfer created";
+      break;
+    case "completed":
+      header = ":tada: Transfer completed";
+      break;
+    case "failed":
+      header = "Transfer failed";
+      break;
+    case "reversed":
+      header = "Transfer reversed";
+      break;
+  }
 
   return {
     type: "modal",
@@ -106,15 +117,7 @@ export function transferDetails(transfer: any): View {
             type: "mrkdwn",
             text: source + "\n" + sourceEmail,
           },
-          {
-            type: "mrkdwn",
-            text:
-              sourceBankAccountName +
-              "\n" +
-              sourceBankAccountType +
-              " • " +
-              sourceBankAccountLastNumber,
-          },
+          sourceBlock,
         ],
       },
       {
@@ -131,15 +134,7 @@ export function transferDetails(transfer: any): View {
             type: "mrkdwn",
             text: destination + "\n" + destinationEmail,
           },
-          {
-            type: "mrkdwn",
-            text:
-              destinationBankAccountName +
-              "\n" +
-              destinationBankAccountType +
-              " • " +
-              destinationBankAccountLastNumber,
-          },
+          destinationBlock,
         ],
       },
       {
@@ -164,4 +159,28 @@ export function transferDetails(transfer: any): View {
       },
     ],
   };
+}
+
+function getDetailsBlock(details: any): MrkdwnElement {
+  let text = "";
+  if (details.bankAccount) {
+    text =
+      details.bankAccount.bankName +
+      "\n" +
+      details.bankAccount.bankAccountType +
+      "\n" +
+      details.bankAccount.lastFourAccountNumber;
+  } else if (details.wallet) {
+    text = "Instant transfer";
+  } else if (details.card) {
+    text =
+      details.card.brand +
+      "\n" +
+      details.card.lastFourCardNumber +
+      "\n" +
+      details.card.expiration.month +
+      "/" +
+      details.card.expiration.year;
+  }
+  return { type: "mrkdwn", text };
 }

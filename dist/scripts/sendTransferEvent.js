@@ -30,7 +30,7 @@ const authentication_1 = require("../services/authentication");
 (async () => {
     await configuration.load();
     const config = configuration.active();
-    const url = `http://localhost:${config.port}/webhooks`;
+    const url = `http://localhost:${configuration.active().port}/webhooks`;
     const timestamp = new Date().toISOString();
     const nonce = (0, crypto_1.randomUUID)();
     const webhookID = (0, crypto_1.randomUUID)();
@@ -50,7 +50,7 @@ const authentication_1 = require("../services/authentication");
                 type: "transfer.updated",
                 data: {
                     transferID: process.argv[2],
-                    status: "completed",
+                    status: "failed",
                 },
                 createdOn: new Date().toISOString(),
             },

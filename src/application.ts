@@ -10,6 +10,9 @@ let application: App | null = null;
 export async function start(config: Configuration) {
   const receiver = new ExpressReceiver({ signingSecret: config.slack.signingSecret });
   application = new App({ token: config.slack.token, receiver });
+  application.error(async (err: any): Promise<void> => {
+    console.error("Unhandled error", err);
+  });
 
   application.action("inspectTransfer", showTransferDetails);
 
