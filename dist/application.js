@@ -17,6 +17,9 @@ async function start(config) {
     receiver.router.use(express_1.default.urlencoded({ extended: true }));
     receiver.router.post("/webhooks", moov_1.handleWebhookEvent);
     receiver.router.get("/ping", async (_, res) => res.sendStatus(200));
+    receiver.router.use((req, res, next) => {
+        res.status(404).send("Not found");
+    });
     await application.start(config.port);
     console.log(`listening on port ${config.port}`);
 }

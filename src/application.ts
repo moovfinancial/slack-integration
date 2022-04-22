@@ -18,6 +18,9 @@ export async function start(config: Configuration) {
 
   receiver.router.post("/webhooks", handleWebhookEvent);
   receiver.router.get("/ping", async (_, res) => res.sendStatus(200));
+  receiver.router.use((req, res, next) => {
+      res.status(404).send("Not found");
+  })
 
   await application.start(config.port);
   console.log(`listening on port ${config.port}`);
