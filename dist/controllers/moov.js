@@ -5,7 +5,7 @@ const authentication_1 = require("../services/authentication");
 const slack_1 = require("../services/slack");
 const eventMap = {
     "transfer.created": handleTransferEvent,
-    "transfer.updated": handleTransferEvent,
+    "transfer.updated": handleTransferEvent
     // --> Add additional event handlers here
 };
 async function handleWebhookEvent(req, res) {

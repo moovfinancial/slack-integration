@@ -6,7 +6,7 @@ type EventHandler = (event: string, body: any) => Promise<void>;
 
 const eventMap: Record<string, EventHandler> = {
   "transfer.created": handleTransferEvent,
-  "transfer.updated": handleTransferEvent,
+  "transfer.updated": handleTransferEvent
   // --> Add additional event handlers here
 };
 
