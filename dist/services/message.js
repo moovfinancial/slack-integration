@@ -45,6 +45,7 @@ function transferMessage(type, transfer) {
 }
 exports.transferMessage = transferMessage;
 function transferDetails(transfer) {
+    var _a, _b, _c;
     const amount = +transfer.amount.value / 100;
     const status = transfer.status;
     const source = transfer.source.account.displayName;
@@ -54,10 +55,25 @@ function transferDetails(transfer) {
     const sourceBankAccountLastNumber = transfer.source.bankAccount.lastFourAccountNumber;
     const destination = transfer.destination.account.displayName;
     const destinationEmail = transfer.destination.account.email;
-    const destinationBankAccountName = transfer.destination.bankAccount.bankName;
-    const destinationBankAccountType = transfer.destination.bankAccount.bankAccountType;
-    const destinationBankAccountLastNumber = transfer.destination.bankAccount.lastFourAccountNumber;
-    const header = status === "pending" ? "ACH transfer created" : ":tada:  ACH transfer complete";
+    let header = "";
+    switch (status) {
+        case "pending":
+            header = "ACH transfer created";
+            break;
+        case "failed":
+            header = ":exclamation: ACH transfer failed";
+            break;
+        default:
+            header = ":tada: ACH transfer complete";
+            break;
+    }
+    let destinationDetails = "Moov wallet";
+    if (transfer.destination.bankAccount) {
+        destinationDetails = ((_a = transfer.destination.bankAccount) === null || _a === void 0 ? void 0 : _a.bankName) + "\n" +
+            ((_b = transfer.destination.bankAccount) === null || _b === void 0 ? void 0 : _b.bankAccountType) +
+            " • " +
+            ((_c = transfer.destination.bankAccount) === null || _c === void 0 ? void 0 : _c.lastFourAccountNumber);
+    }
     return {
         type: "modal",
         title: {
@@ -113,11 +129,7 @@ function transferDetails(transfer) {
                     },
                     {
                         type: "mrkdwn",
-                        text: destinationBankAccountName +
-                            "\n" +
-                            destinationBankAccountType +
-                            " • " +
-                            destinationBankAccountLastNumber,
+                        text: destinationDetails,
                     },
                 ],
             },

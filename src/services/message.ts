@@ -55,10 +55,28 @@ export function transferDetails(transfer: any): View {
   const sourceBankAccountLastNumber = transfer.source.bankAccount.lastFourAccountNumber;
   const destination = transfer.destination.account.displayName;
   const destinationEmail = transfer.destination.account.email;
-  const destinationBankAccountName = transfer.destination.bankAccount.bankName;
-  const destinationBankAccountType = transfer.destination.bankAccount.bankAccountType;
-  const destinationBankAccountLastNumber = transfer.destination.bankAccount.lastFourAccountNumber;
-  const header = status === "pending" ? "ACH transfer created" : ":tada:  ACH transfer complete";
+
+  let header: string = "";
+  switch(status) {
+    case "pending":
+      header = "ACH transfer created";
+      break;
+    case "failed":
+      header = ":exclamation: ACH transfer failed";
+      break;
+    default:
+      header = ":tada: ACH transfer complete"
+      break;
+  }
+
+  let destinationDetails: string = "Moov wallet";
+
+  if (transfer.destination.bankAccount) {
+    destinationDetails = transfer.destination.bankAccount?.bankName + "\n" +
+    transfer.destination.bankAccount?.bankAccountType +
+    " • " +
+    transfer.destination.bankAccount?.lastFourAccountNumber;
+  }
 
   return {
     type: "modal",
@@ -116,12 +134,7 @@ export function transferDetails(transfer: any): View {
           },
           {
             type: "mrkdwn",
-            text:
-              destinationBankAccountName +
-              "\n" +
-              destinationBankAccountType +
-              " • " +
-              destinationBankAccountLastNumber,
+            text: destinationDetails,
           },
         ],
       },
