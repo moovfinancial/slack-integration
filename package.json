@@ -13,7 +13,7 @@
     "start": "node ./dist/index.js",
     "start:watch": "nodemon ./dist/index.js --watch ./dist --watch ./.env",
     "sendTransferEvent": "node ./dist/scripts/sendTransferEvent.js",
-    "test": "echo TODO"
+    "test": "tsc && node ./dist/test.js"
   },
   "devDependencies": {
     "@types/node": "^16.9.1",

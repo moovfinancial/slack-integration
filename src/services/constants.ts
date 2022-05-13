@@ -1,6 +1,0 @@
-export const TRANSFER_CREATED = "transfer.created"
-export const TRANSFER_UPDATED = "transfer.updated"
-export const TRANSFER_STATUS_PENDING = "pending"
-export const TRANSFER_STATUS_COMPLETED = "completed"
-export const TRANSFER_STATUS_FAILED = "failed"
-export const TRANSFER_STATUS_REVERSED = "reversed"

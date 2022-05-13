@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { signatureIsValid } from "../services/authentication";
-import { sendTransferMessage } from "../services/slack";
+import { Env } from "../services/env";
+import * as CNT from "../constants";
 
 type EventHandler = (event: string, body: any) => Promise<void>;
 
-const eventMap: Record<string, EventHandler> = {
-  "transfer.created": handleTransferEvent,
-  "transfer.updated": handleTransferEvent
-  // --> Add additional event handlers here
-};
+const eventMap: Record<string, EventHandler> = {};
+
+eventMap[CNT.TRANSFER_CREATED] = handleTransfer;
+eventMap[CNT.TRANSFER_UPDATED] = handleTransfer;
 
 export async function handleWebhookEvent(req: Request, res: Response): Promise<void> {
   if (!signatureIsValid(req.headers)) {
@@ -37,9 +37,14 @@ export async function handleWebhookEvent(req: Request, res: Response): Promise<v
   res.sendStatus(200);
 }
 
-async function handleTransferEvent(type: string, body: any) {
-  if (type === "transfer.updated" && body.data?.status !== "completed") return;
+async function handleTransfer(type: string, body: any) {
+  if (
+    type === CNT.TRANSFER_UPDATED &&
+    body.data?.status !== CNT.TRANSFER_STATUS_COMPLETED &&
+    body.data?.status !== CNT.TRANSFER_STATUS_REVERSED
+  )
+    return;
 
   const transferID: string = body.data?.transferID || body.data?.TransferID;
-  await sendTransferMessage(type, transferID);
+  await Env.SlackService.sendTransferMessage(type, transferID);
 }

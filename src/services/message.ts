@@ -1,6 +1,6 @@
 import { View } from "@slack/bolt";
 import { createNode } from "yaml";
-import * as cnt from "./constants";
+import * as cnt from "../constants";
 
 export function transferMessage(type: string, transfer: any) {
   const amount = +transfer.amount.value / 100;
