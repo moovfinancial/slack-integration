@@ -41,7 +41,7 @@ async function handleTransfer(type: string, body: any) {
   if (
     type === CNT.TRANSFER_UPDATED &&
     body.data?.status !== CNT.TRANSFER_STATUS_COMPLETED &&
-    body.data?.status !== CNT.TRANSFER_STATUS_REVERSED
+    body.data?.status !== CNT.TRANSFER_STATUS_REVERSED 
   )
     return;
 

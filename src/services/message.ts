@@ -80,13 +80,14 @@ export function transferDetails(transfer: any): View {
   const sourceBankAccountLastNumber = transfer.source.bankAccount.lastFourAccountNumber;
   const destination = transfer.destination.account.displayName;
   const destinationEmail = transfer.destination.account.email;
-  const destinationBankAccountName = transfer.destination.bankAccount.bankName;
-  const destinationBankAccountType = transfer.destination.bankAccount.bankAccountType;
-  const destinationBankAccountLastNumber = transfer.destination.bankAccount.lastFourAccountNumber;
-  let header = "";
+ 
+  let header: string = "";
   switch (status) {
     case cnt.TRANSFER_STATUS_PENDING:
       header = "ACH transfer created";
+      break;
+    case cnt.TRANSFER_STATUS_FAILED:
+      header = ":exclamation: ACH transfer failed";
       break;
     case cnt.TRANSFER_STATUS_REVERSED:
       header = "ACH transfer reversed";
@@ -94,6 +95,18 @@ export function transferDetails(transfer: any): View {
     case cnt.TRANSFER_STATUS_COMPLETED:
     default:
       header = ":tada:  ACH transfer complete";
+      break;
+  }
+
+  let destinationDetails: string = "Moov wallet";
+
+  if (transfer.destination.bankAccount) {
+    destinationDetails =
+      transfer.destination.bankAccount?.bankName +
+      "\n" +
+      transfer.destination.bankAccount?.bankAccountType +
+      " • " +
+      transfer.destination.bankAccount?.lastFourAccountNumber;
   }
 
   return {
@@ -152,12 +165,7 @@ export function transferDetails(transfer: any): View {
           },
           {
             type: "mrkdwn",
-            text:
-              destinationBankAccountName +
-              "\n" +
-              destinationBankAccountType +
-              " • " +
-              destinationBankAccountLastNumber,
+            text: destinationDetails,
           },
         ],
       },
