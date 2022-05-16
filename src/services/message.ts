@@ -72,10 +72,10 @@ export function transferDetails(transfer: any): View {
   let destinationDetails: string = "Moov wallet";
 
   if (transfer.destination.bankAccount) {
-    destinationDetails = transfer.destination.bankAccount?.bankName + "\n" +
-    transfer.destination.bankAccount?.bankAccountType +
+    destinationDetails = transfer.destination.bankAccount.bankName + "\n" +
+    transfer.destination.bankAccount.bankAccountType +
     " • " +
-    transfer.destination.bankAccount?.lastFourAccountNumber;
+    transfer.destination.bankAccount.lastFourAccountNumber;
   }
 
   return {
