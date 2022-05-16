@@ -50,9 +50,6 @@ export function transferDetails(transfer: any): View {
   const status = transfer.status;
   const source = transfer.source.account.displayName;
   const sourceEmail = transfer.source.account.email;
-  const sourceBankAccountName = transfer.source.bankAccount.bankName;
-  const sourceBankAccountType = transfer.source.bankAccount.bankAccountType;
-  const sourceBankAccountLastNumber = transfer.source.bankAccount.lastFourAccountNumber;
   const destination = transfer.destination.account.displayName;
   const destinationEmail = transfer.destination.account.email;
 
@@ -67,6 +64,15 @@ export function transferDetails(transfer: any): View {
     default:
       header = ":tada: ACH transfer complete"
       break;
+  }
+
+  let sourceDetails: string = "Moov wallet";
+
+  if (transfer.source.bankAccount) {
+    sourceDetails = transfer.source.bankAccount.bankName + "\n" +
+    transfer.source.bankAccount.bankAccountType +
+    " • " +
+    transfer.source.bankAccount.lastFourAccountNumber;
   }
 
   let destinationDetails: string = "Moov wallet";
@@ -109,12 +115,7 @@ export function transferDetails(transfer: any): View {
           },
           {
             type: "mrkdwn",
-            text:
-              sourceBankAccountName +
-              "\n" +
-              sourceBankAccountType +
-              " • " +
-              sourceBankAccountLastNumber,
+            text: sourceDetails,
           },
         ],
       },
