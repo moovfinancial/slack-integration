@@ -1,11 +1,7 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -92,14 +88,10 @@ function transferMessage(type, transfer) {
 }
 exports.transferMessage = transferMessage;
 function transferDetails(transfer) {
-    var _a, _b, _c;
     const amount = +transfer.amount.value / 100;
     const status = transfer.status;
     const source = transfer.source.account.displayName;
     const sourceEmail = transfer.source.account.email;
-    const sourceBankAccountName = transfer.source.bankAccount.bankName;
-    const sourceBankAccountType = transfer.source.bankAccount.bankAccountType;
-    const sourceBankAccountLastNumber = transfer.source.bankAccount.lastFourAccountNumber;
     const destination = transfer.destination.account.displayName;
     const destinationEmail = transfer.destination.account.email;
     let header = "";
@@ -118,14 +110,19 @@ function transferDetails(transfer) {
             header = ":tada:  ACH transfer complete";
             break;
     }
+    let sourceDetails = "Moov wallet";
+    if (transfer.source.bankAccount) {
+        sourceDetails = transfer.source.bankAccount.bankName + "\n" +
+            transfer.source.bankAccount.bankAccountType +
+            " • " +
+            transfer.source.bankAccount.lastFourAccountNumber;
+    }
     let destinationDetails = "Moov wallet";
     if (transfer.destination.bankAccount) {
-        destinationDetails =
-            ((_a = transfer.destination.bankAccount) === null || _a === void 0 ? void 0 : _a.bankName) +
-                "\n" +
-                ((_b = transfer.destination.bankAccount) === null || _b === void 0 ? void 0 : _b.bankAccountType) +
-                " • " +
-                ((_c = transfer.destination.bankAccount) === null || _c === void 0 ? void 0 : _c.lastFourAccountNumber);
+        destinationDetails = transfer.destination.bankAccount.bankName + "\n" +
+            transfer.destination.bankAccount.bankAccountType +
+            " • " +
+            transfer.destination.bankAccount.lastFourAccountNumber;
     }
     return {
         type: "modal",
@@ -158,11 +155,7 @@ function transferDetails(transfer) {
                     },
                     {
                         type: "mrkdwn",
-                        text: sourceBankAccountName +
-                            "\n" +
-                            sourceBankAccountType +
-                            " • " +
-                            sourceBankAccountLastNumber,
+                        text: sourceDetails,
                     },
                 ],
             },
