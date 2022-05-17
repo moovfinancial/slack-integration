@@ -7,12 +7,12 @@ exports.active = exports.start = void 0;
 const bolt_1 = require("@slack/bolt");
 const express_1 = __importDefault(require("express"));
 const moov_1 = require("./controllers/moov");
-const slack_1 = require("./services/slack");
+const env_1 = require("./services/env");
 let application = null;
 async function start(config) {
     const receiver = new bolt_1.ExpressReceiver({ signingSecret: config.slack.signingSecret });
     application = new bolt_1.App({ token: config.slack.token, receiver });
-    application.action("inspectTransfer", slack_1.showTransferDetails);
+    application.action("inspectTransfer", env_1.Env.SlackService.showTransferDetails);
     receiver.router.use(express_1.default.json());
     receiver.router.use(express_1.default.urlencoded({ extended: true }));
     receiver.router.post("/webhooks", moov_1.handleWebhookEvent);

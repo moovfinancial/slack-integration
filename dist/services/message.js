@@ -1,20 +1,63 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transferDetails = exports.transferMessage = void 0;
+const cnt = __importStar(require("../constants"));
 function transferMessage(type, transfer) {
     const amount = +transfer.amount.value / 100;
     const source = transfer.source.account.displayName;
     const destination = transfer.destination.account.displayName;
-    const header = type === "transfer.created" ? "Transfer created" : "Transfer completed :tada:";
-    const description = type === "transfer.created"
-        ? "A transfer of *$" +
-            amount.toFixed(2) +
-            "* from *" +
-            source +
-            "* to *" +
-            destination +
-            "* is pending."
-        : "*" + source + "* sent *$" + amount.toFixed(2) + "* to *" + destination + "*.";
+    let header = "";
+    let description = "";
+    switch (type) {
+        case cnt.TRANSFER_CREATED:
+            header = "Transfer created";
+            description =
+                "A transfer of *$" +
+                    amount.toFixed(2) +
+                    "* from *" +
+                    source +
+                    "* to *" +
+                    destination +
+                    "* is pending.";
+            break;
+        default:
+            switch (transfer.status) {
+                case cnt.TRANSFER_STATUS_REVERSED:
+                    header = "Transfer reversed";
+                    description =
+                        "A transfer of *$" +
+                            amount.toFixed(2) +
+                            "* from *" +
+                            source +
+                            "* to *" +
+                            destination +
+                            "* has been reversed.";
+                    break;
+                default:
+                    header = "Transfer completed :tada:";
+                    description =
+                        "*" + source + "* sent *$" + amount.toFixed(2) + "* to *" + destination + "*.";
+            }
+    }
     return [
         {
             type: "header",
@@ -45,34 +88,41 @@ function transferMessage(type, transfer) {
 }
 exports.transferMessage = transferMessage;
 function transferDetails(transfer) {
-    var _a, _b, _c;
     const amount = +transfer.amount.value / 100;
     const status = transfer.status;
     const source = transfer.source.account.displayName;
     const sourceEmail = transfer.source.account.email;
-    const sourceBankAccountName = transfer.source.bankAccount.bankName;
-    const sourceBankAccountType = transfer.source.bankAccount.bankAccountType;
-    const sourceBankAccountLastNumber = transfer.source.bankAccount.lastFourAccountNumber;
     const destination = transfer.destination.account.displayName;
     const destinationEmail = transfer.destination.account.email;
     let header = "";
     switch (status) {
-        case "pending":
+        case cnt.TRANSFER_STATUS_PENDING:
             header = "ACH transfer created";
             break;
-        case "failed":
+        case cnt.TRANSFER_STATUS_FAILED:
             header = ":exclamation: ACH transfer failed";
             break;
-        default:
-            header = ":tada: ACH transfer complete";
+        case cnt.TRANSFER_STATUS_REVERSED:
+            header = "ACH transfer reversed";
             break;
+        case cnt.TRANSFER_STATUS_COMPLETED:
+        default:
+            header = ":tada:  ACH transfer complete";
+            break;
+    }
+    let sourceDetails = "Moov wallet";
+    if (transfer.source.bankAccount) {
+        sourceDetails = transfer.source.bankAccount.bankName + "\n" +
+            transfer.source.bankAccount.bankAccountType +
+            " • " +
+            transfer.source.bankAccount.lastFourAccountNumber;
     }
     let destinationDetails = "Moov wallet";
     if (transfer.destination.bankAccount) {
-        destinationDetails = ((_a = transfer.destination.bankAccount) === null || _a === void 0 ? void 0 : _a.bankName) + "\n" +
-            ((_b = transfer.destination.bankAccount) === null || _b === void 0 ? void 0 : _b.bankAccountType) +
+        destinationDetails = transfer.destination.bankAccount.bankName + "\n" +
+            transfer.destination.bankAccount.bankAccountType +
             " • " +
-            ((_c = transfer.destination.bankAccount) === null || _c === void 0 ? void 0 : _c.lastFourAccountNumber);
+            transfer.destination.bankAccount.lastFourAccountNumber;
     }
     return {
         type: "modal",
@@ -105,11 +155,7 @@ function transferDetails(transfer) {
                     },
                     {
                         type: "mrkdwn",
-                        text: sourceBankAccountName +
-                            "\n" +
-                            sourceBankAccountType +
-                            " • " +
-                            sourceBankAccountLastNumber,
+                        text: sourceDetails,
                     },
                 ],
             },

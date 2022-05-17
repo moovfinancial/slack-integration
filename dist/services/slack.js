@@ -19,40 +19,41 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.showTransferDetails = exports.sendTransferMessage = void 0;
+exports.SlackService = void 0;
 const application = __importStar(require("../application"));
 const configuration = __importStar(require("../configuration"));
 const message_1 = require("./message");
-const moov_1 = require("./moov");
-async function sendTransferMessage(type, transferID) {
-    try {
-        const config = configuration.active();
-        const transferData = await (0, moov_1.getTransferData)(transferID);
-        const blocks = (0, message_1.transferMessage)(type, transferData);
-        const app = application.active();
-        await app.client.chat.postMessage({
-            channel: config.slack.channel,
-            blocks,
-        });
+const env_1 = require("./env");
+class SlackService {
+    async sendTransferMessage(type, transferID) {
+        try {
+            const config = configuration.active();
+            const transferData = await env_1.Env.MoovService.getTransferData(transferID);
+            const blocks = (0, message_1.transferMessage)(type, transferData);
+            const app = application.active();
+            await app.client.chat.postMessage({
+                channel: config.slack.channel,
+                blocks,
+            });
+        }
+        catch (err) {
+            console.error(`slack.sendTransferMessage failed: `, (err === null || err === void 0 ? void 0 : err.message) || err);
+        }
     }
-    catch (err) {
-        console.error(`slack.sendTransferMessage failed: `, (err === null || err === void 0 ? void 0 : err.message) || err);
+    async showTransferDetails({ body, client, ack }) {
+        try {
+            await ack();
+            const config = configuration.active();
+            const transferData = await env_1.Env.MoovService.getTransferData(body.actions[0].value);
+            const view = (0, message_1.transferDetails)(transferData);
+            await client.views.open({
+                trigger_id: body.trigger_id,
+                view,
+            });
+        }
+        catch (err) {
+            console.error(`slack.showTransferDetails failed: `, (err === null || err === void 0 ? void 0 : err.message) || err);
+        }
     }
 }
-exports.sendTransferMessage = sendTransferMessage;
-async function showTransferDetails({ body, client, ack }) {
-    try {
-        await ack();
-        const config = configuration.active();
-        const transferData = await (0, moov_1.getTransferData)(body.actions[0].value);
-        const view = (0, message_1.transferDetails)(transferData);
-        await client.views.open({
-            trigger_id: body.trigger_id,
-            view,
-        });
-    }
-    catch (err) {
-        console.error(`slack.showTransferDetails failed: `, (err === null || err === void 0 ? void 0 : err.message) || err);
-    }
-}
-exports.showTransferDetails = showTransferDetails;
+exports.SlackService = SlackService;

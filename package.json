@@ -1,6 +1,6 @@
 {
   "name": "slack-integration",
-  "version": "v1.0.9",
+  "version": "v1.0.10",
   "description": "Get Moov transfer notifications in Slack",
   "main": "dist/index.js",
   "repository": "https://github.com/moov-io/slack-integration",
@@ -13,7 +13,8 @@
     "start": "node ./dist/index.js",
     "start:watch": "nodemon ./dist/index.js --watch ./dist --watch ./.env",
     "sendTransferEvent": "node ./dist/scripts/sendTransferEvent.js",
-    "test": "echo TODO"
+    "test": "echo TODO",
+    "localtest": "tsc && node ./dist/test.js"
   },
   "devDependencies": {
     "@types/node": "^16.9.1",

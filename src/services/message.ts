@@ -1,20 +1,45 @@
 import { View } from "@slack/bolt";
+import { createNode } from "yaml";
+import * as cnt from "../constants";
 
 export function transferMessage(type: string, transfer: any) {
   const amount = +transfer.amount.value / 100;
   const source = transfer.source.account.displayName;
   const destination = transfer.destination.account.displayName;
-  const header = type === "transfer.created" ? "Transfer created" : "Transfer completed :tada:";
-  const description =
-    type === "transfer.created"
-      ? "A transfer of *$" +
+  let header = "";
+  let description = "";
+
+  switch (type) {
+    case cnt.TRANSFER_CREATED:
+      header = "Transfer created";
+      description =
+        "A transfer of *$" +
         amount.toFixed(2) +
         "* from *" +
         source +
         "* to *" +
         destination +
-        "* is pending."
-      : "*" + source + "* sent *$" + amount.toFixed(2) + "* to *" + destination + "*.";
+        "* is pending.";
+      break;
+    default:
+      switch (transfer.status) {
+        case cnt.TRANSFER_STATUS_REVERSED:
+          header = "Transfer reversed";
+          description =
+            "A transfer of *$" +
+            amount.toFixed(2) +
+            "* from *" +
+            source +
+            "* to *" +
+            destination +
+            "* has been reversed.";
+          break;
+        default:
+          header = "Transfer completed :tada:";
+          description =
+            "*" + source + "* sent *$" + amount.toFixed(2) + "* to *" + destination + "*.";
+      }
+  }
 
   return [
     {
@@ -54,15 +79,19 @@ export function transferDetails(transfer: any): View {
   const destinationEmail = transfer.destination.account.email;
 
   let header: string = "";
-  switch(status) {
-    case "pending":
+  switch (status) {
+    case cnt.TRANSFER_STATUS_PENDING:
       header = "ACH transfer created";
       break;
-    case "failed":
+    case cnt.TRANSFER_STATUS_FAILED:
       header = ":exclamation: ACH transfer failed";
       break;
+    case cnt.TRANSFER_STATUS_REVERSED:
+      header = "ACH transfer reversed";
+      break;
+    case cnt.TRANSFER_STATUS_COMPLETED:
     default:
-      header = ":tada: ACH transfer complete"
+      header = ":tada:  ACH transfer complete";
       break;
   }
 
@@ -70,18 +99,18 @@ export function transferDetails(transfer: any): View {
 
   if (transfer.source.bankAccount) {
     sourceDetails = transfer.source.bankAccount.bankName + "\n" +
-    transfer.source.bankAccount.bankAccountType +
-    " • " +
-    transfer.source.bankAccount.lastFourAccountNumber;
+      transfer.source.bankAccount.bankAccountType +
+      " • " +
+      transfer.source.bankAccount.lastFourAccountNumber;
   }
 
   let destinationDetails: string = "Moov wallet";
 
   if (transfer.destination.bankAccount) {
     destinationDetails = transfer.destination.bankAccount.bankName + "\n" +
-    transfer.destination.bankAccount.bankAccountType +
-    " • " +
-    transfer.destination.bankAccount.lastFourAccountNumber;
+      transfer.destination.bankAccount.bankAccountType +
+      " • " +
+      transfer.destination.bankAccount.lastFourAccountNumber;
   }
 
   return {
