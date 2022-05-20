@@ -70,6 +70,81 @@ export function transferMessage(type: string, transfer: any) {
   ];
 }
 
+function resolveHeader(transfer: any): string {
+  let src = "";
+  let dst = "";
+
+
+  let status = transfer.status;
+
+  if (transfer.source.bankAccount) {
+    src = "Bank"
+  } else if (transfer.source.wallet) {
+    src = "Wallet"
+  } else {
+    src = "Card"
+  }
+
+  if (transfer.destination.bankAccount) {
+    dst = "Bank"
+  } else if (transfer.destination.wallet) {
+    dst = "Wallet"
+  } else {
+    dst = "Card"
+  }
+
+  switch (status) {
+    case cnt.TRANSFER_STATUS_PENDING:
+      status = "Transfer created";
+      break;
+    case cnt.TRANSFER_STATUS_FAILED:
+      status = ":exclamation: Transfer failed";
+      break;
+    case cnt.TRANSFER_STATUS_REVERSED:
+      status = "Transfer reversed";
+      break;
+    case cnt.TRANSFER_STATUS_COMPLETED:
+    default:
+      status = ":tada:  Transfer complete";
+      break;
+  }
+
+  return `${src} to ${dst}: ${status}`
+}
+
+export interface TransferDetails {
+  Src: string
+  Dst: string
+}
+
+function resolveDetails(transfer: any): TransferDetails {
+  let ret: TransferDetails = { Dst: "", Src: "" }
+
+  if (transfer.source.bankAccount) {
+    ret.Src = transfer.source.bankAccount.bankName + "\n" +
+      transfer.source.bankAccount.bankAccountType +
+      " • " +
+      transfer.source.bankAccount.lastFourAccountNumber;
+  } else if (transfer.source.wallet) {
+    ret.Src = "Moov Wallet"
+  } else {
+    ret.Src = "Card"
+  }
+
+  if (transfer.destination.bankAccount) {
+    ret.Dst = transfer.destination.bankAccount.bankName + "\n" +
+      transfer.destination.bankAccount.bankAccountType +
+      " • " +
+      transfer.destination.bankAccount.lastFourAccountNumber;
+  } else if (transfer.destination.wallet) {
+    ret.Dst = "Moov Wallet"
+  } else {
+    ret.Dst = "Card"
+  }
+
+  return ret
+}
+
 export function transferDetails(transfer: any): View {
   const amount = +transfer.amount.value / 100;
   const status = transfer.status;
@@ -78,40 +153,25 @@ export function transferDetails(transfer: any): View {
   const destination = transfer.destination.account.displayName;
   const destinationEmail = transfer.destination.account.email;
 
-  let header: string = "";
-  switch (status) {
-    case cnt.TRANSFER_STATUS_PENDING:
-      header = "ACH transfer created";
-      break;
-    case cnt.TRANSFER_STATUS_FAILED:
-      header = ":exclamation: ACH transfer failed";
-      break;
-    case cnt.TRANSFER_STATUS_REVERSED:
-      header = "ACH transfer reversed";
-      break;
-    case cnt.TRANSFER_STATUS_COMPLETED:
-    default:
-      header = ":tada:  ACH transfer complete";
-      break;
-  }
+  let header: string = resolveHeader(transfer)
+  let details: TransferDetails = resolveDetails(transfer)
+  //let sourceDetails: string = "Moov wallet";
 
-  let sourceDetails: string = "Moov wallet";
+  // if (transfer.source.bankAccount) {
+  //   sourceDetails = transfer.source.bankAccount.bankName + "\n" +
+  //     transfer.source.bankAccount.bankAccountType +
+  //     " • " +
+  //     transfer.source.bankAccount.lastFourAccountNumber;
+  // }
 
-  if (transfer.source.bankAccount) {
-    sourceDetails = transfer.source.bankAccount.bankName + "\n" +
-      transfer.source.bankAccount.bankAccountType +
-      " • " +
-      transfer.source.bankAccount.lastFourAccountNumber;
-  }
+  // let destinationDetails: string = "Moov wallet";
 
-  let destinationDetails: string = "Moov wallet";
-
-  if (transfer.destination.bankAccount) {
-    destinationDetails = transfer.destination.bankAccount.bankName + "\n" +
-      transfer.destination.bankAccount.bankAccountType +
-      " • " +
-      transfer.destination.bankAccount.lastFourAccountNumber;
-  }
+  // if (transfer.destination.bankAccount) {
+  //   destinationDetails = transfer.destination.bankAccount.bankName + "\n" +
+  //     transfer.destination.bankAccount.bankAccountType +
+  //     " • " +
+  //     transfer.destination.bankAccount.lastFourAccountNumber;
+  // }
 
   return {
     type: "modal",
@@ -144,7 +204,7 @@ export function transferDetails(transfer: any): View {
           },
           {
             type: "mrkdwn",
-            text: sourceDetails,
+            text: details.Src,
           },
         ],
       },
@@ -164,7 +224,7 @@ export function transferDetails(transfer: any): View {
           },
           {
             type: "mrkdwn",
-            text: destinationDetails,
+            text: details.Dst,
           },
         ],
       },

@@ -8,36 +8,7 @@ import buildGotErrorMessage from "./helpers/buildGotErrorMessage";
 import { generateSignature } from "./services/authentication";
 import { env } from "process";
 
-class MockMoovService implements IMoovService {
-  parentService: IMoovService | null = null;
 
-  FakeGetTranserData = (transferID: string): Promise<any> => {
-    if (this.parentService) {
-      return this.parentService.getTransferData(transferID);
-    }
-    return Promise.resolve(true);
-  };
-
-  FakeCreateToken(): Promise<any> {
-    if (this.parentService) {
-      return this.parentService.createToken();
-    }
-    return Promise.resolve(true);
-  }
-
-  getTransferData(transferID: string): Promise<any> {
-    if (this.FakeGetTranserData != null) {
-      return this.FakeGetTranserData(transferID);
-    }
-    return Promise.resolve(true);
-  }
-  createToken(): Promise<MoovToken> {
-    if (this.FakeCreateToken) {
-      return this.FakeCreateToken();
-    }
-    return Promise.resolve({} as MoovToken);
-  }
-}
 
 const ReversedTransferPayload = {
   transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
@@ -146,6 +117,448 @@ const CompletedTransferPayload = {
     },
   },
 };
+
+
+const CompletedTransferPayloadBank2Wallet = {
+  transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
+  createdAt: "2022-05-13T14:35:15Z",
+  createdOn: "2022-05-13T14:35:15Z",
+  status: "completed",
+  amount: {
+    currency: "USD",
+    value: 200,
+  },
+  facilitatorFee: {
+    total: 0,
+  },
+  source: {
+    paymentMethodID: "5cc58d59-a79e-41ad-99f3-7e223ba99eaa",
+    paymentMethodType: "ach-debit-fund",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    bankAccount: {
+      bankAccountID: "3abc682a-1523-45fb-9776-b14c058fcccf",
+      fingerprint: "c22e13fc21f8006b40eb4e6bc215a5e05eff5d98c1136a1ed60890d66bc5c056",
+      status: "verified",
+      holderName: "Wic Noods",
+      holderType: "individual",
+      bankName: "VERIDIAN CREDIT UNION",
+      bankAccountType: "checking",
+      routingNumber: "273976369",
+      lastFourAccountNumber: "4333",
+    },
+    ach: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+    achDetails: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+  },
+  destination: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "moov-wallet",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    wallet: {
+      walletID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+};
+
+const CompletedTransferPayloadBank2Card = {
+  transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
+  createdAt: "2022-05-13T14:35:15Z",
+  createdOn: "2022-05-13T14:35:15Z",
+  status: "completed",
+  amount: {
+    currency: "USD",
+    value: 200,
+  },
+  facilitatorFee: {
+    total: 0,
+  },
+  source: {
+    paymentMethodID: "5cc58d59-a79e-41ad-99f3-7e223ba99eaa",
+    paymentMethodType: "ach-debit-fund",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    bankAccount: {
+      bankAccountID: "3abc682a-1523-45fb-9776-b14c058fcccf",
+      fingerprint: "c22e13fc21f8006b40eb4e6bc215a5e05eff5d98c1136a1ed60890d66bc5c056",
+      status: "verified",
+      holderName: "Wic Noods",
+      holderType: "individual",
+      bankName: "VERIDIAN CREDIT UNION",
+      bankAccountType: "checking",
+      routingNumber: "273976369",
+      lastFourAccountNumber: "4333",
+    },
+    ach: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+    achDetails: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+  },
+  destination: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "card",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    card: {
+      cardID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+};
+
+const CompletedTransferPayloadBank2Bank = {
+  transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
+  createdAt: "2022-05-13T14:35:15Z",
+  createdOn: "2022-05-13T14:35:15Z",
+  status: "completed",
+  amount: {
+    currency: "USD",
+    value: 200,
+  },
+  facilitatorFee: {
+    total: 0,
+  },
+  source: {
+    paymentMethodID: "5cc58d59-a79e-41ad-99f3-7e223ba99eaa",
+    paymentMethodType: "ach-debit-fund",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    bankAccount: {
+      bankAccountID: "3abc682a-1523-45fb-9776-b14c058fcccf",
+      fingerprint: "c22e13fc21f8006b40eb4e6bc215a5e05eff5d98c1136a1ed60890d66bc5c056",
+      status: "verified",
+      holderName: "Wic Noods",
+      holderType: "individual",
+      bankName: "VERIDIAN CREDIT UNION",
+      bankAccountType: "checking",
+      routingNumber: "273976369",
+      lastFourAccountNumber: "4333",
+    },
+    ach: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+    achDetails: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+  },
+  destination: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "moov-wallet",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    bankAccount: {
+      bankAccountID: "3abc682a-1523-45fb-9776-b14c058fcccf",
+      fingerprint: "c22e13fc21f8006b40eb4e6bc215a5e05eff5d98c1136a1ed60890d66bc5c056",
+      status: "verified",
+      holderName: "Wic Noods",
+      holderType: "individual",
+      bankName: "VERIDIAN CREDIT UNION",
+      bankAccountType: "checking",
+      routingNumber: "273976369",
+      lastFourAccountNumber: "4333",
+    },
+    ach: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+    achDetails: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+  },
+};
+
+
+const CompletedTransferPayloadCard2Wallet = {
+  transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
+  createdAt: "2022-05-13T14:35:15Z",
+  createdOn: "2022-05-13T14:35:15Z",
+  status: "completed",
+  amount: {
+    currency: "USD",
+    value: 200,
+  },
+  facilitatorFee: {
+    total: 0,
+  },
+  source: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "card",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    card: {
+      cardID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+  destination: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "moov-wallet",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    wallet: {
+      walletID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+};
+
+const CompletedTransferPayloadCard2Card = {
+  transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
+  createdAt: "2022-05-13T14:35:15Z",
+  createdOn: "2022-05-13T14:35:15Z",
+  status: "completed",
+  amount: {
+    currency: "USD",
+    value: 200,
+  },
+  facilitatorFee: {
+    total: 0,
+  },
+  source: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "card",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    card: {
+      cardID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+  destination: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "card",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    card: {
+      cardID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+};
+
+const CompletedTransferPayloadCard2Bank = {
+  transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
+  createdAt: "2022-05-13T14:35:15Z",
+  createdOn: "2022-05-13T14:35:15Z",
+  status: "completed",
+  amount: {
+    currency: "USD",
+    value: 200,
+  },
+  facilitatorFee: {
+    total: 0,
+  },
+  source: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "card",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    card: {
+      cardID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+  destination: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "moov-wallet",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    bankAccount: {
+      bankAccountID: "3abc682a-1523-45fb-9776-b14c058fcccf",
+      fingerprint: "c22e13fc21f8006b40eb4e6bc215a5e05eff5d98c1136a1ed60890d66bc5c056",
+      status: "verified",
+      holderName: "Wic Noods",
+      holderType: "individual",
+      bankName: "VERIDIAN CREDIT UNION",
+      bankAccountType: "checking",
+      routingNumber: "273976369",
+      lastFourAccountNumber: "4333",
+    },
+    ach: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+    achDetails: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+  },
+};
+
+const CompletedTransferPayloadWallet2Wallet = {
+  transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
+  createdAt: "2022-05-13T14:35:15Z",
+  createdOn: "2022-05-13T14:35:15Z",
+  status: "completed",
+  amount: {
+    currency: "USD",
+    value: 200,
+  },
+  facilitatorFee: {
+    total: 0,
+  },
+  source: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "moov-wallet",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    wallet: {
+      walletID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+  destination: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "moov-wallet",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    wallet: {
+      walletID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+};
+
+const CompletedTransferPayloadWallet2Card = {
+  transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
+  createdAt: "2022-05-13T14:35:15Z",
+  createdOn: "2022-05-13T14:35:15Z",
+  status: "completed",
+  amount: {
+    currency: "USD",
+    value: 200,
+  },
+  facilitatorFee: {
+    total: 0,
+  },
+  source: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "moov-wallet",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    wallet: {
+      walletID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+  destination: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "card",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    card: {
+      cardID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+};
+
+const CompletedTransferPayloadWallet2Bank = {
+  transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
+  createdAt: "2022-05-13T14:35:15Z",
+  createdOn: "2022-05-13T14:35:15Z",
+  status: "completed",
+  amount: {
+    currency: "USD",
+    value: 200,
+  },
+  facilitatorFee: {
+    total: 0,
+  },
+  source: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "moov-wallet",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    wallet: {
+      walletID: "35bce66e-c8f2-48ed-8fd0-c02bfd55e71a",
+    },
+  },
+  destination: {
+    paymentMethodID: "ce0a27e7-5735-4432-a9c9-09c4d2082411",
+    paymentMethodType: "moov-wallet",
+    account: {
+      accountID: "d4496693-cc50-466e-ab07-3974bfe7f4ac",
+      email: "amanda@classbooker.dev",
+      displayName: "Moov Financial",
+    },
+    bankAccount: {
+      bankAccountID: "3abc682a-1523-45fb-9776-b14c058fcccf",
+      fingerprint: "c22e13fc21f8006b40eb4e6bc215a5e05eff5d98c1136a1ed60890d66bc5c056",
+      status: "verified",
+      holderName: "Wic Noods",
+      holderType: "individual",
+      bankName: "VERIDIAN CREDIT UNION",
+      bankAccountType: "checking",
+      routingNumber: "273976369",
+      lastFourAccountNumber: "4333",
+    },
+    ach: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+    achDetails: {
+      status: "completed",
+      traceNumber: "221475788687776",
+    },
+  },
+};
+
+
 
 const PendingTransferPayload = {
   transferID: "ea96962b-cf0c-4409-9ef6-ead3aa7f619a",
@@ -305,6 +718,61 @@ const CreatedTransactionBody = {
   createdOn: "2022-05-13T18:02:11.196621113Z",
 };
 
+let payloads: { [s: string]: any } = {
+  "e07bd82e-875b-4122-9374-4a03860da8ca": ReversedTransferPayload,
+  "e07bd82e-875b-4122-9374-4a03860da8cb": CompletedTransferPayload,
+  "e07bd82e-875b-4122-9374-4a03860da8cc": CompletedTransferPayloadBank2Bank,
+  "e07bd82e-875b-4122-9374-4a03860da8cd": CompletedTransferPayloadBank2Card,
+  "e07bd82e-875b-4122-9374-4a03860da8ce": CompletedTransferPayloadBank2Wallet,
+  "e07bd82e-875b-4122-9374-4a03860da8cf": CompletedTransferPayloadCard2Bank,
+  "e07bd82e-875b-4122-9374-4a03860da8cg": CompletedTransferPayloadCard2Card,
+  "e07bd82e-875b-4122-9374-4a03860da8ch": CompletedTransferPayloadCard2Wallet,
+  "e07bd82e-875b-4122-9374-4a03860da8ci": CompletedTransferPayloadWallet2Bank,
+  "e07bd82e-875b-4122-9374-4a03860da8cj": CompletedTransferPayloadWallet2Card,
+  "e07bd82e-875b-4122-9374-4a03860da8ck": CompletedTransferPayloadWallet2Wallet,
+  "e07bd82e-875b-4122-9374-4a03860da8cl": CompletedTransferPayloadBank2Wallet,
+  "e07bd82e-875b-4122-9374-4a03860da8cm": PendingTransferPayload,
+  "e07bd82e-875b-4122-9374-4a03860da8cn": FailedTransferPayload,
+}
+
+
+class MockMoovService implements IMoovService {
+  parentService: IMoovService | null = null;
+
+  FakeGetTranserData = (transferID: string): Promise<any> => {
+    if (this.parentService) {
+      return this.parentService.getTransferData(transferID);
+    }
+    return Promise.resolve(true);
+  };
+
+  FakeCreateToken(): Promise<any> {
+    if (this.parentService) {
+      return this.parentService.createToken();
+    }
+    return Promise.resolve(true);
+  }
+
+  getTransferData(transferID: string): Promise<any> {
+    if (this.FakeGetTranserData != null) {
+      return this.FakeGetTranserData(transferID);
+    }
+    if (this.parentService) {
+      return this.parentService.getTransferData(transferID)
+    }
+    return Promise.resolve(true)
+  }
+  createToken(): Promise<MoovToken> {
+    if (this.FakeCreateToken) {
+      return this.FakeCreateToken();
+    }
+    if (this.parentService) {
+      return this.parentService.createToken()
+    }
+    return Promise.resolve({} as MoovToken)
+  }
+}
+
 async function SendTransaction(body: any): Promise<any> {
   await configuration.load();
   const config = configuration.active();
@@ -336,38 +804,15 @@ async function SendTransaction(body: any): Promise<any> {
 
 async function Test(mockMoovService: MockMoovService) {
 
-  mockMoovService.FakeGetTranserData = async (transferID: string) => {
-    let amount = randomInt(100000);
-    FailedTransferPayload.amount.value = amount;
-    console.log(`Generating Failed transaction of ${amount}`);
-    return Promise.resolve(FailedTransferPayload);
-  };
+  for (let id in payloads) {
+    let nbody = JSON.parse(JSON.stringify(CreatedTransactionBody))
+    nbody.data.transferID = id
+    await SendTransaction(nbody)
+  }
 
   await SendTransaction(FailedTransactionBody);
 
-  mockMoovService.FakeGetTranserData = async (transferID: string) => {
-    let amount = randomInt(100000);
-    ReversedTransferPayload.amount.value = amount;
-    console.log(`Generating Reversed transaction of ${amount}`);
-    return Promise.resolve(ReversedTransferPayload);
-  };
-
   await SendTransaction(ReversedTransactionBody);
-
-
-  mockMoovService.FakeGetTranserData = async (transferID: string) => {
-    let amount = randomInt(100000);
-    PendingTransferPayload.amount.value = amount;
-    console.log(`Generating Pending transaction of ${amount}`);
-    return Promise.resolve(PendingTransferPayload);
-  };
-
-  mockMoovService.FakeGetTranserData = async (transferID: string) => {
-    let amount = randomInt(100000);
-    CompletedTransferPayload.amount.value = amount;
-    console.log(`Generating Completed transaction of ${amount}`);
-    return Promise.resolve(CompletedTransferPayload);
-  };
 
   await SendTransaction(CompletedTransactionBody);
 
@@ -381,6 +826,16 @@ async function Test(mockMoovService: MockMoovService) {
     env["MOOV_API_URL"] = "http://local.moov.io/api";
 
     let mockMoovService = new MockMoovService();
+    mockMoovService.parentService = new MoovService();
+
+    mockMoovService.FakeGetTranserData = async (transferID: string) => {
+      let body = payloads[transferID]
+      let amount = randomInt(100000);
+      body.amount.value = amount;
+      body.transferID = transferID;
+      return body
+  
+    };
 
     Env.MoovService = mockMoovService;
 
@@ -397,5 +852,5 @@ async function Test(mockMoovService: MockMoovService) {
     }
   }
 
- // process.exit(1);
+  // process.exit(1);
 })();
